@@ -12,7 +12,7 @@ import static frc.robot.Constants.*;
 /** Add your docs here. */
 public class DriveTrainSimIO implements DriveTrainIO  {
 
-    private final double moment = 0.0005;
+    private final double moment = 0.05;
 
     private boolean isBrake;
     private final DCMotor lefMotors;
@@ -34,6 +34,8 @@ public class DriveTrainSimIO implements DriveTrainIO  {
         inputs.isBrake = isBrake;
         inputs.leftCurent = lMotorSim.getCurrentDrawAmps();
         inputs.rightCurent = rMotorSim.getCurrentDrawAmps();
+        inputs.leftPos = lMotorSim.getAngularPositionRad();
+        inputs.rightPos = rMotorSim.getAngularPositionRad();
     }
     public void drive(double leftPower, double rightPower){
         lMotorSim.setInput(leftPower);
