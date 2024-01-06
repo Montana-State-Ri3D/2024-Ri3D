@@ -1,8 +1,6 @@
 package frc.robot;
 
 import frc.robot.commands.DriveCommand;
-import frc.robot.subsystems.Mode;
-import frc.robot.subsystems.Mode.Type;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.utility.RobotIdentity;
 import frc.robot.utility.SubsystemFactory;
@@ -24,7 +22,6 @@ public class RobotContainer {
   private final CommandXboxController testController = new CommandXboxController(TEST_CONTROLLER_PORT);
 
   private DriveTrain driveTrainSubsystem;
-  private Mode mode;
 
   private DriveCommand driveCommand;
 
@@ -41,8 +38,6 @@ public class RobotContainer {
   private void createSubsystems() {
 
     driveTrainSubsystem = SubsystemFactory.createDriveTrain(identity);
-
-    mode = new Mode();
   }
 
   private void createCommands() {
