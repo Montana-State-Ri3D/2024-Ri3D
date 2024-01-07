@@ -28,6 +28,9 @@ public final class Constants {
     public static final int RIGHT_FRONT_MOTOR = 3;
     public static final int RIGHT_BACK_MOTOR = 4;
 
+    public static final int CLIMBER_MOTOR = 10;
+    public static final int CLIMBER_WENCH_MOTOR = 11;
+
     public static final int INTAKE_MOTOR = 5;
 
     public static final int FEED_MOTOR = 6;
@@ -35,8 +38,6 @@ public final class Constants {
     public static final int SHOOTER_WRIST = 7;
     public static final int SHOOTER_LEFT = 10;
     public static final int SHOOTER_RIGHT = 11;
-
-    public static final int CLIMBER = 12;
 
     public static final double INTAKE_RADIO = (1.0/4.0);
     public static final double SHOOTER_RADIO = (1.0/4.0);
