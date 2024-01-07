@@ -34,6 +34,8 @@ public class RobotContainer {
 
   private DriveCommand driveCommand;
 
+  private ClimberCommand climberCommand;
+
   private RobotIdentity identity;
 
   public RobotContainer() {
@@ -57,6 +59,10 @@ public class RobotContainer {
         () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
         () -> -driveController.getLeftX());
     driveTrainSubsystem.setDefaultCommand(driveCommand);
+
+    climberCommand = new ClimberCommand(climberSubsystem,
+        () -> -operatorController.getLeftY());
+    climberSubsystem.setDefaultCommand(climberCommand);
     
   }
 
@@ -67,7 +73,7 @@ public class RobotContainer {
     // Toggle Brake Mode with A
     driveController.a().onTrue(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
     
-    driveController.b().onTrue(new ClimberCommand(climberSubsystem));
+    // driveController.b().onTrue(new ClimberCommand(climberSubsystem));
 
     driveController.x().onTrue(new InstantCommand(() -> intakeSubsystem.setPower(0.5), intakeSubsystem));
 
