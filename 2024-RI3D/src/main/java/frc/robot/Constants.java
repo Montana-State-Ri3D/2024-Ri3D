@@ -29,6 +29,7 @@ public final class Constants {
 
     // Climber Motor
     public static final int CLIMBER_MOTOR = 10;
+    public static final int CLIMBER_WENCH_MOTOR = 11;
 
     // Gear Radios
     public static final double DRIVE_RADIO = 360.0*(1.0/8.0);

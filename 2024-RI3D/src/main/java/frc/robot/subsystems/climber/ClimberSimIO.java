@@ -13,7 +13,7 @@ public class ClimberSimIO implements ClimberIO {
 
   private double inputClimberPower = 0;
 
-  private DCMotor climberDCMotor = DCMotor.getNEO(1);
+  private DCMotor climberDCMotors = DCMotor.getNEO(2);
   private final DCMotorSim climberDCMotorSim;
 
   //private final DCMotorSim climberDCMotorSim = DCMotorSim(climberDCMotor,CLIMB_RADIO, moment);
@@ -23,8 +23,8 @@ public class ClimberSimIO implements ClimberIO {
   private double appliedPower;
 
   public ClimberSimIO(){
-    climberDCMotor = DCMotor.getCIM(1);
-    climberDCMotorSim = new DCMotorSim(climberDCMotor,CLIMB_RADIO, moment);
+    climberDCMotors = DCMotor.getCIM(2);
+    climberDCMotorSim = new DCMotorSim(climberDCMotors,CLIMB_RADIO, moment);
 
 
     isBrake = false;
@@ -33,13 +33,13 @@ public class ClimberSimIO implements ClimberIO {
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
     inputs.climberisBrake = isBrake;
+    inputs.climberisBrakeWench = isBrake;
     inputs.vertPos = climberDCMotorSim.getAngularPositionRad();
+    inputs.vertPosWench = climberDCMotorSim.getAngularPositionRad();
     inputs.climberCurrent = climberDCMotorSim.getCurrentDrawAmps();
+    inputs.climberCurrentWench = climberDCMotorSim.getCurrentDrawAmps();
     inputs.appliedPower = appliedPower;
+    inputs.appliedPowerWench = appliedPower;
   }
-
-
-
-
 
 }

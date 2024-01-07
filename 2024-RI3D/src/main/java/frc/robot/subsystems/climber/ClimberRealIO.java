@@ -10,8 +10,10 @@ import static frc.robot.Constants.*;
 public class ClimberRealIO implements ClimberIO {
 
     private CANSparkMax climberMotor;
+    private CANSparkMax climberWenchMotor;
 
     private RelativeEncoder climberMotorEncoder;
+    private RelativeEncoder climberWenchMotorEncoder;
 
     private SparkMaxPIDController m_pidController;
 
@@ -21,25 +23,26 @@ public class ClimberRealIO implements ClimberIO {
 
     public double kP, kI, kD, kMaxOutput, kMinOutput, maxVel, minVel, maxAcc, allowedErr;
 
-    public ClimberRealIO(){
-        initClimberBase(CLIMBER_MOTOR);
-    }
-
-    private void initClimberBase(int IDclimberMotor) {
+    public ClimberRealIO(int IDclimberMotor, int IDclimberWenchMotor) {
         climberMotor = new CANSparkMax(IDclimberMotor, MotorType.kBrushless);
+        climberWenchMotor = new CANSparkMax(IDclimberWenchMotor, MotorType.kBrushless);
 
         climberMotor.restoreFactoryDefaults();
-        climberMotor.restoreFactoryDefaults();
+        climberWenchMotor.restoreFactoryDefaults();
 
         //Config
         climberMotor.setSmartCurrentLimit(45);
+        climberWenchMotor.setSmartCurrentLimit(45);
 
         climberMotor.setIdleMode(IdleMode.kBrake);
+        climberWenchMotor.setIdleMode(IdleMode.kBrake);
 
         climberMotor.setInverted(true);
+        climberWenchMotor.setInverted(true);
 
         m_pidController = climberMotor.getPIDController();
         climberMotorEncoder = climberMotor.getEncoder();
+        climberWenchMotorEncoder = climberWenchMotor.getEncoder();
 
         // PID coefficients
         kP = 0; 
@@ -54,21 +57,30 @@ public class ClimberRealIO implements ClimberIO {
         m_pidController.setOutputRange(kMinOutput, kMaxOutput);
 
         climberMotorEncoder.setPositionConversionFactor(CLIMB_RADIO);
+        climberWenchMotorEncoder.setPositionConversionFactor(CLIMB_RADIO);
 
         isBrake = false;
     }
 
     public void updateInputs(ClimberIOInputs inputs) {
         inputs.climberisBrake = isBrake;
+        inputs.climberisBrakeWench = isBrake;
         inputs.vertPos = climberMotorEncoder.getPosition();
+        inputs.vertPosWench = climberWenchMotorEncoder.getPosition();
         inputs.climberCurrent = climberMotor.getOutputCurrent();
+        inputs.climberCurrentWench = climberWenchMotor.getOutputCurrent();
         inputs.appliedPower = climberMotor.getAppliedOutput();
+        inputs.appliedPowerWench = climberWenchMotor.getAppliedOutput();
 
     }
 
     public void teleopPeriodic() {
         m_pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
     }
+
+    public void setWenchPower(double power) {
+        climberWenchMotor.set(power);
+      }
 
     public void resetClimberEncoder(){
       climberMotorEncoder.setPosition(0);

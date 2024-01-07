@@ -1,5 +1,7 @@
 package frc.robot;
 
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.utility.RobotIdentity;
@@ -23,7 +25,11 @@ public class RobotContainer {
 
   private DriveTrain driveTrainSubsystem;
 
+  private Climber ClimberSubsystem;
+
   private DriveCommand driveCommand;
+
+  private ClimberCommand climberCommand;
 
   private RobotIdentity identity;
 
@@ -38,6 +44,7 @@ public class RobotContainer {
   private void createSubsystems() {
 
     driveTrainSubsystem = SubsystemFactory.createDriveTrain(identity);
+    ClimberSubsystem = SubsystemFactory.createClimber(identity);
   }
 
   private void createCommands() {
@@ -46,14 +53,16 @@ public class RobotContainer {
         () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
         () -> -driveController.getLeftX());
     driveTrainSubsystem.setDefaultCommand(driveCommand);
-
+    
   }
 
   private void configureButtonBindings() {
 
     // Toggle Brake Mode with A
     driveController.a().onTrue(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
+    driveController.a().onTrue(new ClimberCommand(ClimberSubsystem));
   }
+
 
   public Command getAutonomousCommand() {
     return null;
