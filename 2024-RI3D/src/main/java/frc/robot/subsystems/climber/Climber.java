@@ -26,13 +26,9 @@ public class Climber extends SubsystemBase {
   public void setWinchPower(double power) {
 
     io.setWenchPower(power);
-
-    logger.recordOutput("Climber/WenchPower", power);
   }
-  public void setBarHeight(double power) {
+  public void setBarPos(double pos) {
 
-    //io.arm(power);
-
-    //logger.recordOutput("Climber/Power", power);
+    io.updateSetPoint(pos);
   }
 }

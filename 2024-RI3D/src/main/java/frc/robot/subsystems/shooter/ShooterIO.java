@@ -10,8 +10,6 @@ public interface ShooterIO {
         public double rightCurent;
         public double leftVelocity;
         public double rightVelocity;
-        public double wristAngle;
-        public double wristSetPoint;
     }
     default void updateInputs(ShooterIOInputs inputs){}
     default void setPowers(double leftPower, double rightPower) {}

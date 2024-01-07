@@ -7,6 +7,9 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import static frc.robot.Constants.*;
 
+import java.lang.annotation.Target;
+import java.lang.reflect.GenericSignatureFormatError;
+
 public class ClimberRealIO implements ClimberIO {
 
     private CANSparkMax climberMotor;
@@ -15,11 +18,11 @@ public class ClimberRealIO implements ClimberIO {
     private RelativeEncoder climberMotorEncoder;
     private RelativeEncoder climberWenchMotorEncoder;
 
-    private SparkMaxPIDController m_pidController;
+    private SparkMaxPIDController wenchPIDController;
 
     private boolean isBrake;
 
-    public double setPoint;
+    public double targetPos;
 
     public double kP, kI, kD, kMaxOutput, kMinOutput, maxVel, minVel, maxAcc, allowedErr;
 
@@ -30,6 +33,7 @@ public class ClimberRealIO implements ClimberIO {
         climberMotor.restoreFactoryDefaults();
         climberWenchMotor.restoreFactoryDefaults();
 
+        climberWenchMotorEncoder = climberWenchMotor.getEncoder();
         //Config
         climberMotor.setSmartCurrentLimit(45);
         climberWenchMotor.setSmartCurrentLimit(45);
@@ -40,7 +44,10 @@ public class ClimberRealIO implements ClimberIO {
         climberMotor.setInverted(true);
         climberWenchMotor.setInverted(true);
 
-        m_pidController = climberMotor.getPIDController();
+        climberWenchMotorEncoder.setPositionConversionFactor(WENCH_RADIO*Math.PI*2);
+        climberWenchMotorEncoder.setVelocityConversionFactor(WENCH_RADIO*Math.PI*2/60);
+
+        wenchPIDController = climberMotor.getPIDController();
         climberMotorEncoder = climberMotor.getEncoder();
         climberWenchMotorEncoder = climberWenchMotor.getEncoder();
 
@@ -51,31 +58,32 @@ public class ClimberRealIO implements ClimberIO {
         kMaxOutput = 1; 
         kMinOutput = -1;
 
-        m_pidController.setP(kP);
-        m_pidController.setI(kI);
-        m_pidController.setD(kD);
-        m_pidController.setOutputRange(kMinOutput, kMaxOutput);
+        wenchPIDController.setP(kP);
+        wenchPIDController.setI(kI);
+        wenchPIDController.setD(kD);
+        wenchPIDController.setOutputRange(kMinOutput, kMaxOutput);
 
-        climberMotorEncoder.setPositionConversionFactor(CLIMB_RADIO);
-        climberWenchMotorEncoder.setPositionConversionFactor(CLIMB_RADIO);
-
-        isBrake = false;
+        isBrake = true;
     }
 
     public void updateInputs(ClimberIOInputs inputs) {
         inputs.climberisBrake = isBrake;
         inputs.climberisBrakeWench = isBrake;
-        inputs.vertPos = climberMotorEncoder.getPosition();
+        inputs.vertPosBar = climberMotorEncoder.getPosition();
         inputs.vertPosWench = climberWenchMotorEncoder.getPosition();
         inputs.climberCurrent = climberMotor.getOutputCurrent();
         inputs.climberCurrentWench = climberWenchMotor.getOutputCurrent();
         inputs.appliedPower = climberMotor.getAppliedOutput();
         inputs.appliedPowerWench = climberWenchMotor.getAppliedOutput();
+        inputs.targetPos = this.targetPos;
+        inputs.angularPos = 0;
+        inputs.angularPosWench = climberWenchMotorEncoder.getPosition();
 
     }
 
-    public void teleopPeriodic() {
-        m_pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
+    public void updateSetPoint(double setPoint) {
+        wenchPIDController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
+        targetPos = setPoint;
     }
 
     public void setWenchPower(double power) {
