@@ -52,7 +52,6 @@ public class RobotContainer {
   }
 
   private void createCommands() {
-
     driveCommand = new DriveCommand(driveTrainSubsystem,
         () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
         () -> -driveController.getLeftX());
