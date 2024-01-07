@@ -1,8 +1,10 @@
 package frc.robot;
 
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.Shoot;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.utility.RobotIdentity;
 import frc.robot.utility.SubsystemFactory;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -24,6 +26,7 @@ public class RobotContainer {
 
   private DriveTrain driveTrainSubsystem;
   private Intake intakeSubsystem;
+  private Shooter shooterSubsystem;
 
   private DriveCommand driveCommand;
 
@@ -40,6 +43,7 @@ public class RobotContainer {
   private void createSubsystems() {
     driveTrainSubsystem = SubsystemFactory.createDriveTrain(identity);
     intakeSubsystem = SubsystemFactory.createIntake(identity);
+    shooterSubsystem = SubsystemFactory.createShooter(identity);
 
   }
 
@@ -53,6 +57,8 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+
+    driveController.rightBumper().onTrue(new Shoot(shooterSubsystem));
 
     // Toggle Brake Mode with A
     driveController.a().onTrue(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
