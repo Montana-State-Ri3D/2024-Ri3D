@@ -78,6 +78,10 @@ public class RobotContainer {
     driveController.x().onTrue(new InstantCommand(() -> intakeSubsystem.setPower(0.5), intakeSubsystem));
 
     driveController.y().onTrue(new InstantCommand(() -> intakeSubsystem.setPower(0), intakeSubsystem));
+
+    //testController.x().onTrue(new InstantCommand(() -> climberSubsystem.setBarPos(0), climberSubsystem));
+
+    //testController.b().onTrue(new InstantCommand(() -> climberSubsystem.setBarPos(Math.PI*8), climberSubsystem));
   }
 
 

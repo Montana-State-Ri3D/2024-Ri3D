@@ -26,4 +26,7 @@ public interface ClimberIO {
 
     default void updateInputs(ClimberIOInputs inputs){}
     default void setWenchPower(double power){}
+    default void updateSetPoint(double power){}
+    default void resetClimberEncoder(){}
+
 }

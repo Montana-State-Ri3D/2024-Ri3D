@@ -33,6 +33,7 @@ public class ClimberRealIO implements ClimberIO {
         climberMotor.restoreFactoryDefaults();
         climberWenchMotor.restoreFactoryDefaults();
 
+        climberWenchMotorEncoder = climberWenchMotor.getEncoder();
         //Config
         climberMotor.setSmartCurrentLimit(45);
         climberWenchMotor.setSmartCurrentLimit(45);
@@ -42,6 +43,9 @@ public class ClimberRealIO implements ClimberIO {
 
         climberMotor.setInverted(true);
         climberWenchMotor.setInverted(true);
+
+        climberWenchMotorEncoder.setPositionConversionFactor(WENCH_RADIO*Math.PI*2);
+        climberWenchMotorEncoder.setVelocityConversionFactor(WENCH_RADIO*Math.PI*2/60);
 
         wenchPIDController = climberMotor.getPIDController();
         climberMotorEncoder = climberMotor.getEncoder();
@@ -59,9 +63,6 @@ public class ClimberRealIO implements ClimberIO {
         wenchPIDController.setD(kD);
         wenchPIDController.setOutputRange(kMinOutput, kMaxOutput);
 
-        climberMotorEncoder.setPositionConversionFactor(CLIMB_RADIO);
-        climberWenchMotorEncoder.setPositionConversionFactor(CLIMB_RADIO);
-
         isBrake = true;
     }
 
@@ -76,7 +77,7 @@ public class ClimberRealIO implements ClimberIO {
         inputs.appliedPowerWench = climberWenchMotor.getAppliedOutput();
         inputs.targetPos = this.targetPos;
         inputs.angularPos = 0;
-        inputs.angularPosWench = 0;
+        inputs.angularPosWench = climberWenchMotorEncoder.getPosition();
 
     }
 
