@@ -64,11 +64,6 @@ public class RobotContainer {
 
     driveController.rightBumper().onTrue(new Shoot(shooterSubsystem));
 
-    // Toggle Brake Mode with A
-    driveController.a().onTrue(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
-    
-    driveController.b().onTrue(new ClimberCommand(climberSubsystem));
-
     driveController.x().onTrue(new InstantCommand(() -> intakeSubsystem.setPower(0.5), intakeSubsystem));
 
     driveController.y().onTrue(new InstantCommand(() -> intakeSubsystem.setPower(0), intakeSubsystem));
