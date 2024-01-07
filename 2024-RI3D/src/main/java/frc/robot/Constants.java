@@ -33,12 +33,13 @@ public final class Constants {
     public static final int FEED_MOTOR = 6;
 
     public static final int SHOOTER_WRIST = 7;
-    public static final int SHOOTER_1 = 8;
-    public static final int SHOOTER_2 = 9;
+    public static final int SHOOTER_LEFT = 10;
+    public static final int SHOOTER_RIGHT = 11;
 
-    public static final int CLIMBER = 10;
+    public static final int CLIMBER = 12;
 
     public static final double INTAKE_RADIO = (1.0/4.0);
+    public static final double SHOOTER_RADIO = (1.0/4.0);
     public static final double CLIMB_RADIO = (1.0/4.0);
     public static final double DRIVE_RADIO = 360.0*(1.0/8.0);
 }
