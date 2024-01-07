@@ -1,5 +1,6 @@
 package frc.robot;
 
+import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
@@ -10,6 +11,7 @@ import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.utility.RobotIdentity;
 import frc.robot.utility.SubsystemFactory;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -29,7 +31,7 @@ public class RobotContainer {
   private DriveTrain driveTrainSubsystem;
   private Intake intakeSubsystem;
   private Shooter shooterSubsystem;
-
+  private Arm armSubsystem;
   private Climber climberSubsystem;
 
   private DriveCommand driveCommand;
@@ -51,33 +53,31 @@ public class RobotContainer {
     climberSubsystem = SubsystemFactory.createClimber(identity);
     intakeSubsystem = SubsystemFactory.createIntake(identity);
     shooterSubsystem = SubsystemFactory.createShooter(identity);
+    armSubsystem = SubsystemFactory.createArm(identity);
   }
 
   private void createCommands() {
-
     driveCommand = new DriveCommand(driveTrainSubsystem,
         () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
         () -> -driveController.getLeftX());
     driveTrainSubsystem.setDefaultCommand(driveCommand);
 
-    climberCommand = new ClimberCommand(climberSubsystem,
-        () -> -operatorController.getLeftY());
-    climberSubsystem.setDefaultCommand(climberCommand);
+    //climberCommand = new ClimberCommand(climberSubsystem,
+    //    () -> -operatorController.getLeftY());
+    //climberSubsystem.setDefaultCommand(climberCommand);
     
   }
 
   private void configureButtonBindings() {
 
-    driveController.rightBumper().onTrue(new Shoot(shooterSubsystem));
+    //driveController.rightBumper().onTrue(new Shoot(shooterSubsystem));
 
     // Toggle Brake Mode with A
-    driveController.a().onTrue(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
-    
-    // driveController.b().onTrue(new ClimberCommand(climberSubsystem));
+    driveController.b().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(90)), driveTrainSubsystem));
 
-    driveController.x().onTrue(new InstantCommand(() -> intakeSubsystem.setPower(0.5), intakeSubsystem));
+    driveController.a().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(0)), driveTrainSubsystem));
 
-    driveController.y().onTrue(new InstantCommand(() -> intakeSubsystem.setPower(0), intakeSubsystem));
+    driveController.y().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(180)), driveTrainSubsystem));
 
     //testController.x().onTrue(new InstantCommand(() -> climberSubsystem.setBarPos(0), climberSubsystem));
 
