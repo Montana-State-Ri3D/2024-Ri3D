@@ -29,7 +29,7 @@ public final class Constants {
     public static final int RIGHT_BACK_MOTOR = 4;
 
     public static final int CLIMBER_MOTOR = 10;
-    public static final int CLIMBER_WENCH_MOTOR = 11;
+    public static final int CLIMBER_WENCH_MOTOR = 9;
 
     public static final int INTAKE_MOTOR = 5;
 
