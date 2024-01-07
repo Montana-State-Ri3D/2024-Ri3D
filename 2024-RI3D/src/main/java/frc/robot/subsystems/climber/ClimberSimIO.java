@@ -1,13 +1,7 @@
 package frc.robot.subsystems.climber;
 
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-
-import static frc.robot.Constants.*;
-
 public class ClimberSimIO implements ClimberIO {
 // Math goes here
-  private final double moment = 0.05;
 
   /* private DCMotor climberDCMotor = DCMotor.getNEO(1);
   private final DCMotorSim climberDCMotorSim;
@@ -20,27 +14,15 @@ public class ClimberSimIO implements ClimberIO {
 
   //private final DCMotorSim climberDCMotorSim = DCMotorSim(climberDCMotor,CLIMB_RADIO, moment);
 
-  private boolean isBrakeBar;
   private boolean isBrakeWench;
 
-  private double appliedPower;
-
   public ClimberSimIO() {
-
-    isBrakeBar = true;
   }
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
-    inputs.climberisBrake = isBrakeBar;
     inputs.climberisBrakeWench = isBrakeWench;
-    inputs.vertPosBar = 0;
-    inputs.vertPosWench = 0;
-    inputs.climberCurrent = 0;
     inputs.climberCurrentWench = 0;
-    inputs.appliedPower = appliedPower;
     inputs.appliedPowerWench = inputWenchPower;
-    inputs.targetPos = 0;
-    inputs.angularPos = 0;
     inputs.angularPosWench = 0;
   }
 

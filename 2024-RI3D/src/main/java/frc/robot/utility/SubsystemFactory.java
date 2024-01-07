@@ -51,8 +51,8 @@ public final class SubsystemFactory {
             case SIMULATION:
                 return new Climber(new ClimberSimIO());
             default:
-                return new Climber(new ClimberSimIO());
-                //return new Climber(new ClimberRealIO(CLIMBER_MOTOR, CLIMBER_WENCH_MOTOR));
+                //return new Climber(new ClimberSimIO());
+                return new Climber(new ClimberRealIO(CLIMBER_MOTOR, CLIMBER_WENCH_MOTOR));
             
         }
     }
