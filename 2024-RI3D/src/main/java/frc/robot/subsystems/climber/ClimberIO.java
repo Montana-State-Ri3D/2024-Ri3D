@@ -25,7 +25,5 @@ public interface ClimberIO {
     }
 
     default void updateInputs(ClimberIOInputs inputs){}
-    default void climb(double Power) {}
-    default void toggleMode(){}
-
+    default void setWenchPower(double power){}
 }

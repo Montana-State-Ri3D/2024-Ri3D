@@ -30,11 +30,9 @@ public class RobotContainer {
   private Intake intakeSubsystem;
   private Shooter shooterSubsystem;
 
-  private Climber ClimberSubsystem;
+  private Climber climberSubsystem;
 
   private DriveCommand driveCommand;
-
-  private ClimberCommand climberCommand;
 
   private RobotIdentity identity;
 
@@ -48,7 +46,7 @@ public class RobotContainer {
 
   private void createSubsystems() {
     driveTrainSubsystem = SubsystemFactory.createDriveTrain(identity);
-    ClimberSubsystem = SubsystemFactory.createClimber(identity);
+    climberSubsystem = SubsystemFactory.createClimber(identity);
     intakeSubsystem = SubsystemFactory.createIntake(identity);
     shooterSubsystem = SubsystemFactory.createShooter(identity);
   }
@@ -69,7 +67,7 @@ public class RobotContainer {
     // Toggle Brake Mode with A
     driveController.a().onTrue(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
     
-    driveController.b().onTrue(new ClimberCommand(ClimberSubsystem));
+    driveController.b().onTrue(new ClimberCommand(climberSubsystem));
 
     driveController.x().onTrue(new InstantCommand(() -> intakeSubsystem.setPower(0.5), intakeSubsystem));
 

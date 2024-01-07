@@ -9,10 +9,6 @@ public class ClimberSimIO implements ClimberIO {
 // Math goes here
   private final double moment = 0.05;
 
-  private static final double climberGearRadio = CLIMB_RADIO;
-
-  private double inputClimberPower = 0;
-
   private DCMotor climberDCMotors = DCMotor.getNEO(2);
   private final DCMotorSim climberDCMotorSim;
 

@@ -20,19 +20,19 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
 
-    Logger logger = Logger.getInstance();
-
     logger.processInputs("Climber/Inputs", inputs);
   }
 
-  public void climb(double Power) {
+  public void setWinchPower(double power) {
 
-    io.climb(Power);
+    io.setWenchPower(power);
 
-    logger.recordOutput("Climber/Power", Power);
+    logger.recordOutput("Climber/WenchPower", power);
   }
+  public void setBarHeight(double power) {
 
-  public void toggleMode(){
-    io.toggleMode();
+    //io.arm(power);
+
+    //logger.recordOutput("Climber/Power", power);
   }
 }
