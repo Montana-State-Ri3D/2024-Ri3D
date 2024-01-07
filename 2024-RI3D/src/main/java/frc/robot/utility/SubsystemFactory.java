@@ -9,7 +9,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeSimIO;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterRealIO;
-
+import frc.robot.subsystems.shooter.ShooterSimIO;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberRealIO;
 import frc.robot.subsystems.climber.ClimberSimIO;
@@ -38,7 +38,7 @@ public final class SubsystemFactory {
     public static Shooter createShooter(RobotIdentity identity) {
         switch (identity) {
             case SIMULATION:
-                return null;
+                return new Shooter(new ShooterSimIO());
             default:
                 return new Shooter(new ShooterRealIO(SHOOTER_LEFT, SHOOTER_RIGHT, SHOOTER_WRIST));
             
@@ -50,7 +50,8 @@ public final class SubsystemFactory {
             case SIMULATION:
                 return new Climber(new ClimberSimIO());
             default:
-                return new Climber(new ClimberRealIO(CLIMBER_MOTOR, CLIMBER_WENCH_MOTOR));
+                return new Climber(new ClimberSimIO());
+                //return new Climber(new ClimberRealIO(CLIMBER_MOTOR, CLIMBER_WENCH_MOTOR));
             
         }
     }
