@@ -7,8 +7,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import static frc.robot.Constants.*;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-
 public class ClimberRealIO implements ClimberIO {
 
     private CANSparkMax climberMotor;
