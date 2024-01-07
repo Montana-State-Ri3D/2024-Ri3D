@@ -9,33 +9,55 @@ public class ClimberSimIO implements ClimberIO {
 // Math goes here
   private final double moment = 0.05;
 
-  private DCMotor climberDCMotors = DCMotor.getNEO(2);
+  /* private DCMotor climberDCMotor = DCMotor.getNEO(1);
   private final DCMotorSim climberDCMotorSim;
+
+  private DCMotor climberDCWench = DCMotor.getNEO(1);
+  private final DCMotorSim climberDCWenchSim; */
+
+  private double inputWenchPower = 0;
+
 
   //private final DCMotorSim climberDCMotorSim = DCMotorSim(climberDCMotor,CLIMB_RADIO, moment);
 
-  private boolean isBrake;
+  private boolean isBrakeBar;
+  private boolean isBrakeWench;
 
   private double appliedPower;
 
   public ClimberSimIO(){
-    climberDCMotors = DCMotor.getCIM(2);
-    climberDCMotorSim = new DCMotorSim(climberDCMotors,CLIMB_RADIO, moment);
+    // climberDCMotor = DCMotor.getCIM(1);
+    // climberDCWench = DCMotor.getCIM(1);
+    // climberDCMotorSim = new DCMotorSim(climberDCMotor,CLIMB_RADIO, moment);
+    // climberDCWenchSim = new DCMotorSim(climberDCWench,CLIMB_RADIO, moment);
 
 
-    isBrake = false;
+    isBrakeBar = true;
   }
+
+  /* public void updateSetPoint() {
+    m_pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
+} */
 
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
-    inputs.climberisBrake = isBrake;
-    inputs.climberisBrakeWench = isBrake;
-    inputs.vertPos = climberDCMotorSim.getAngularPositionRad();
-    inputs.vertPosWench = climberDCMotorSim.getAngularPositionRad();
-    inputs.climberCurrent = climberDCMotorSim.getCurrentDrawAmps();
-    inputs.climberCurrentWench = climberDCMotorSim.getCurrentDrawAmps();
+    inputs.climberisBrake = isBrakeBar;
+    inputs.climberisBrakeWench = isBrakeWench;
+    inputs.vertPosBar = 0;
+    inputs.vertPosWench = 0;
+    inputs.climberCurrent = 0;
+    inputs.climberCurrentWench = 0;
     inputs.appliedPower = appliedPower;
-    inputs.appliedPowerWench = appliedPower;
+    inputs.appliedPowerWench = inputWenchPower;
+    inputs.targetPos = 0;
+    inputs.angularPos = 0;
+    inputs.angularPosWench = 0;
   }
 
+  @Override
+  public void setWenchPower(double power) {
+    inputWenchPower = power;
+    //climberDCWenchSim.setInputVoltage(power);
+    //climberDCWenchSim.update(0.020);  
+  }
 }
