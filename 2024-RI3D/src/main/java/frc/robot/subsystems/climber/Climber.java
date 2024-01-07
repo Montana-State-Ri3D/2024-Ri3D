@@ -27,8 +27,4 @@ public class Climber extends SubsystemBase {
 
     io.setWenchPower(power);
   }
-  public void setBarPos(double pos) {
-
-    io.updateSetPoint(pos);
-  }
 }
