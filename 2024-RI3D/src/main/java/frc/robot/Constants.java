@@ -20,6 +20,7 @@ public final class Constants {
     public static final int TEST_CONTROLLER_PORT = 2;
 
     public static final int PDP_CAN_ID = 0;
+    public static final int PCM_CAN_ID = 0;
 
     // Drive Motors
     public static final int LEFT_FRONT_MOTOR = 1;
@@ -27,11 +28,19 @@ public final class Constants {
     public static final int RIGHT_FRONT_MOTOR = 3;
     public static final int RIGHT_BACK_MOTOR = 4;
 
-    // Climber Motor
     public static final int CLIMBER_MOTOR = 10;
     public static final int CLIMBER_WENCH_MOTOR = 11;
 
-    // Gear Radios
-    public static final double DRIVE_RADIO = 360.0*(1.0/8.0);
+    public static final int INTAKE_MOTOR = 5;
+
+    public static final int FEED_MOTOR = 6;
+
+    public static final int SHOOTER_WRIST = 7;
+    public static final int SHOOTER_LEFT = 10;
+    public static final int SHOOTER_RIGHT = 11;
+
+    public static final double INTAKE_RADIO = (1.0/4.0);
+    public static final double SHOOTER_RADIO = (1.0/4.0);
     public static final double CLIMB_RADIO = (1.0/4.0);
+    public static final double DRIVE_RADIO = 360.0*(1.0/8.0);
 }

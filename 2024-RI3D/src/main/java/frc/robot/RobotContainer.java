@@ -3,7 +3,10 @@ package frc.robot;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.Shoot;
 import frc.robot.subsystems.drivetrain.DriveTrain;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.utility.RobotIdentity;
 import frc.robot.utility.SubsystemFactory;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -24,6 +27,8 @@ public class RobotContainer {
   private final CommandXboxController testController = new CommandXboxController(TEST_CONTROLLER_PORT);
 
   private DriveTrain driveTrainSubsystem;
+  private Intake intakeSubsystem;
+  private Shooter shooterSubsystem;
 
   private Climber ClimberSubsystem;
 
@@ -42,9 +47,10 @@ public class RobotContainer {
   }
 
   private void createSubsystems() {
-
     driveTrainSubsystem = SubsystemFactory.createDriveTrain(identity);
     ClimberSubsystem = SubsystemFactory.createClimber(identity);
+    intakeSubsystem = SubsystemFactory.createIntake(identity);
+    shooterSubsystem = SubsystemFactory.createShooter(identity);
   }
 
   private void createCommands() {
@@ -58,9 +64,16 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
+    driveController.rightBumper().onTrue(new Shoot(shooterSubsystem));
+
     // Toggle Brake Mode with A
     driveController.a().onTrue(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
-    driveController.a().onTrue(new ClimberCommand(ClimberSubsystem));
+    
+    driveController.b().onTrue(new ClimberCommand(ClimberSubsystem));
+
+    driveController.x().onTrue(new InstantCommand(() -> intakeSubsystem.setPower(0.5), intakeSubsystem));
+
+    driveController.y().onTrue(new InstantCommand(() -> intakeSubsystem.setPower(0), intakeSubsystem));
   }
 
 
