@@ -11,7 +11,7 @@ public class Shoot extends CommandBase {
   Shooter shooter;
 
   private long initTime = -1;
-  private final long shootDuration = 500;
+  private final long shootDuration = 750;
 
   public Shoot(Shooter shooter) {
     addRequirements(shooter);
