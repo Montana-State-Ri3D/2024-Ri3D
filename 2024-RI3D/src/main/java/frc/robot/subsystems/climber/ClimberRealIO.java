@@ -14,7 +14,7 @@ public class ClimberRealIO implements ClimberIO {
 
     private boolean isBrake;
 
-    public ClimberRealIO(int IDclimberMotor, int IDclimberWenchMotor) {
+    public ClimberRealIO( int IDclimberWenchMotor) {
         climberWenchMotor = new CANSparkMax(IDclimberWenchMotor, MotorType.kBrushless);
 
         climberWenchMotor.restoreFactoryDefaults();
@@ -29,9 +29,7 @@ public class ClimberRealIO implements ClimberIO {
 
         climberWenchMotorEncoder.setPositionConversionFactor(WENCH_RADIO*Math.PI*2);
         climberWenchMotorEncoder.setVelocityConversionFactor(WENCH_RADIO*Math.PI*2/60);
-
-        climberWenchMotorEncoder = climberWenchMotor.getEncoder();
-
+        
         isBrake = true;
     }
 
