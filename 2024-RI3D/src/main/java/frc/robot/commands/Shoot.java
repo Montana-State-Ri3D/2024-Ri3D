@@ -11,7 +11,7 @@ public class Shoot extends CommandBase {
   Shooter shooter;
 
   private long initTime = -1;
-  private final long shootDuration = 750;
+  private final long shootDuration = 1500;
 
   public Shoot(Shooter shooter) {
     addRequirements(shooter);
@@ -23,7 +23,7 @@ public class Shoot extends CommandBase {
   @Override
   public void initialize() {
     initTime = System.currentTimeMillis();
-    shooter.setPowers(12, 12);
+    shooter.setPowers(6, 12);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

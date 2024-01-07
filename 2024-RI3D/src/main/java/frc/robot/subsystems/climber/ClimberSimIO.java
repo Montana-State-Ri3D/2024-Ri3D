@@ -25,20 +25,10 @@ public class ClimberSimIO implements ClimberIO {
 
   private double appliedPower;
 
-  public ClimberSimIO(){
-    // climberDCMotor = DCMotor.getCIM(1);
-    // climberDCWench = DCMotor.getCIM(1);
-    // climberDCMotorSim = new DCMotorSim(climberDCMotor,CLIMB_RADIO, moment);
-    // climberDCWenchSim = new DCMotorSim(climberDCWench,CLIMB_RADIO, moment);
-
+  public ClimberSimIO() {
 
     isBrakeBar = true;
   }
-
-  /* public void updateSetPoint() {
-    m_pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
-} */
-
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
     inputs.climberisBrake = isBrakeBar;
