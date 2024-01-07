@@ -1,33 +1,38 @@
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.climber.Climber;
+import frc.robot.utility.Joystick;
 
 
 public class ClimberCommand extends CommandBase {
   /** Creates a new DriveCommand. */
   private final Climber climberSubsystem;
 
-  private long initTime = -1;
-  private final long climbDuration = 500;
+  private final DoubleSupplier wenchSpeed;
+  private double wenchPower;
 
-  public ClimberCommand(Climber climberSubsystem) {
+  public ClimberCommand(Climber climberSubsystem, DoubleSupplier wenchSpeed) {
     this.climberSubsystem = climberSubsystem;
+    this.wenchSpeed = wenchSpeed;
     addRequirements(climberSubsystem);
-
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    climberSubsystem.setWinchPower(0.5);
-    initTime = System.currentTimeMillis();
+    climberSubsystem.setWinchPower(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    wenchPower = Joystick.JoystickInput(wenchSpeed.getAsDouble(), 2, 0.02, .75);
+    System.out.println(wenchPower);
+    climberSubsystem.setWinchPower(wenchPower);
   }
 
   // Called once the command ends or is interrupted.
@@ -39,11 +44,6 @@ public class ClimberCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    long currentTime = System.currentTimeMillis();
-    if (currentTime >= initTime + climbDuration)
-      return true;
-    else
-      ;
     return false;
   }
 }

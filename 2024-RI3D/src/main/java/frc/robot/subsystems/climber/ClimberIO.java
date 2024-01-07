@@ -10,23 +10,14 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ClimberIO {
     @AutoLog
     class ClimberIOInputs{
-        public boolean climberisBrake;
         public boolean climberisBrakeWench;
-        public double climberCurrent;
         public double climberCurrentWench;
-        public double vertPosBar;
-        public double vertPosWench;
-        public double targetPos;
-        public double angularPos;
         public double angularPosWench;
-        public double appliedPower;
         public double appliedPowerWench;
-        public double wenchPower;
     }
 
     default void updateInputs(ClimberIOInputs inputs){}
     default void setWenchPower(double power){}
-    default void updateSetPoint(double power){}
     default void resetClimberEncoder(){}
 
 }
