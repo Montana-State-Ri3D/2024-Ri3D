@@ -59,29 +59,36 @@ public class ClimberRealIO implements ClimberIO {
         climberMotorEncoder.setPositionConversionFactor(CLIMB_RADIO);
         climberWenchMotorEncoder.setPositionConversionFactor(CLIMB_RADIO);
 
-        isBrake = false;
+        isBrake = true;
     }
 
     public void updateInputs(ClimberIOInputs inputs) {
         inputs.climberisBrake = isBrake;
         inputs.climberisBrakeWench = isBrake;
-        inputs.vertPos = climberMotorEncoder.getPosition();
+        inputs.vertPosBar = climberMotorEncoder.getPosition();
         inputs.vertPosWench = climberWenchMotorEncoder.getPosition();
         inputs.climberCurrent = climberMotor.getOutputCurrent();
         inputs.climberCurrentWench = climberWenchMotor.getOutputCurrent();
         inputs.appliedPower = climberMotor.getAppliedOutput();
         inputs.appliedPowerWench = climberWenchMotor.getAppliedOutput();
+        inputs.targetPos = 0;
+        inputs.angularPos = 0;
+        inputs.angularPosWench = 0;
 
     }
 
-    public void teleopPeriodic() {
+    public void updateSetPoint() {
         m_pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
     }
 
     public void setWenchPower(double power) {
         climberWenchMotor.set(power);
       }
+    
+    public void setBarHeight(double height) {
+        final double currentHeight = climberMotorEncoder.getPosition();
 
+    }
     public void resetClimberEncoder(){
       climberMotorEncoder.setPosition(0);
     }
