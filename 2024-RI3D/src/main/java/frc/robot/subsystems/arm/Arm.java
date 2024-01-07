@@ -26,6 +26,9 @@ public class Arm extends SubsystemBase {
 
     logger.processInputs("Arm/Inputs", inputs);
   }
+  public void setArmAngle(double angle) {
+    io.setAngle(angle);
+  }
 
   
 }

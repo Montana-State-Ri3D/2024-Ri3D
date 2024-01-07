@@ -12,6 +12,7 @@ public interface ArmIO {
         public double curentAngle;
         public double velocity;
         public double targetAngle;
+        public double appliedPower;
     }
 
     default void updateInputs(ArmIOInputs inputs){}

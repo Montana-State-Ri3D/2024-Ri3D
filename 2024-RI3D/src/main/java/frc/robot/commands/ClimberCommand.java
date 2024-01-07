@@ -31,7 +31,6 @@ public class ClimberCommand extends CommandBase {
   @Override
   public void execute() {
     wenchPower = Joystick.JoystickInput(wenchSpeed.getAsDouble(), 2, 0.02, .75);
-    System.out.println(wenchPower);
     climberSubsystem.setWinchPower(wenchPower);
   }
 

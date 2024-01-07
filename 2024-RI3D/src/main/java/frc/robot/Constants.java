@@ -39,12 +39,12 @@ public final class Constants {
     public static final int SHOOTER_LEFT = 10;
     public static final int SHOOTER_RIGHT = 11;
 
-    public static final double ARM_Offset = Units.degreesToRadians(0.0);
+    public static final double ARM_Offset = Units.degreesToRadians(75);
 
     public static final double INTAKE_RADIO = (1.0/4.0);
     public static final double SHOOTER_RADIO = (1.0/4.0);
     public static final double CLIMB_RADIO = (1.0/4.0);
     public static final double WENCH_RADIO = (1.0/50.0);
-    public static final double ARM_RADIO = (1.0/4.0);
+    public static final double ARM_RADIO = (1.0/15.0);
     public static final double DRIVE_RADIO = (1.0/8.0);
 }
