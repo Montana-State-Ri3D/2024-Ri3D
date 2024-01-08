@@ -34,6 +34,9 @@ public class Arm extends SubsystemBase {
   }
 
   public void setPosition (String position) {
+
+    logger.recordOutput("Arm/Position", position);
+    
     if (position.equals("INTAKE")) {
       io.setAngle(0);
     }

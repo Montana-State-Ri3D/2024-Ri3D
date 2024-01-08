@@ -17,13 +17,11 @@ public class ClimberRealIO implements ClimberIO {
     public ClimberRealIO( int IDclimberWenchMotor) {
         climberWenchMotor = new CANSparkMax(IDclimberWenchMotor, MotorType.kBrushless);
 
-        climberWenchMotor.restoreFactoryDefaults();
-
         climberWenchMotorEncoder = climberWenchMotor.getEncoder();
         //Config
         climberWenchMotor.setSmartCurrentLimit(45);
 
-        climberWenchMotor.setIdleMode(IdleMode.kBrake);
+        climberWenchMotor.setIdleMode(IdleMode.kCoast);
 
         climberWenchMotor.setInverted(true);
 
@@ -43,5 +41,14 @@ public class ClimberRealIO implements ClimberIO {
 
     public void setWenchPower(double power) {
         climberWenchMotor.set(power);
-      }
+    }
+    
+    public void setBreak(boolean brake){
+        if(brake){
+            climberWenchMotor.setIdleMode(IdleMode.kBrake);
+        }else{
+            climberWenchMotor.setIdleMode(IdleMode.kCoast);
+        }
+        isBrake = brake;
+    }
 }

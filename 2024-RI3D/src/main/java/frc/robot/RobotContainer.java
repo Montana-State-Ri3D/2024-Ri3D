@@ -6,7 +6,6 @@ import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.UnloadCommand;
 import frc.robot.commands.onPressedCommand;
-import frc.robot.commands.Shoot;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.StopShooterCommand;
@@ -24,8 +23,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import static frc.robot.Constants.*;
 
-import java.util.function.DoubleSupplier;
-
 public class RobotContainer {
 
   // Creating Controlers
@@ -42,13 +39,11 @@ public class RobotContainer {
   private Arm armSubsystem;
   private Climber climberSubsystem;
 
-  private DriveCommand driveCommand;
+  private DriveCommand defaultDriveCommand;
 
   private SequentialCommandGroup shootRing;
   private SequentialCommandGroup intakeRing;
   private SequentialCommandGroup climber;
-
-  private DoubleSupplier wenchSpeed;
 
   private RobotIdentity identity;
 
@@ -69,10 +64,8 @@ public class RobotContainer {
   }
 
   private void createCommands() {
-    driveCommand = new DriveCommand(driveTrainSubsystem,
-        () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
-        () -> -driveController.getLeftX());
-    driveTrainSubsystem.setDefaultCommand(driveCommand);
+    //defaultDriveCommand = new DriveCommand(driveTrainSubsystem,() -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),() -> -driveController.getLeftX());
+    //driveTrainSubsystem.setDefaultCommand(defaultDriveCommand);
 
     //climberCommand = new ClimberCommand(climberSubsystem,
     //    () -> -operatorController.getLeftY());
@@ -97,7 +90,7 @@ public class RobotContainer {
     climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCHSTANDBY")));
     climber.addCommands(new onPressedCommand(() ->operatorController.rightBumper().getAsBoolean()));
     climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCH")));
-    climber.addCommands(new ClimberCommand(climberSubsystem, () -> -operatorController.getLeftY()));
+    climber.addCommands(new ClimberCommand(climberSubsystem, () -> operatorController.getLeftY()));
     
   }
 
@@ -114,19 +107,6 @@ public class RobotContainer {
     driveController.rightBumper().onTrue(shootRing);
     driveController.a().onTrue(intakeRing);
     operatorController.leftBumper().onTrue(climber);
-
-  
-
-
-
-
-
-    // MISC BINGDINGS
-    //driveController.rightBumper().onTrue(new Shoot(shooterSubsystem));
-
-    //testController.x().onTrue(new InstantCommand(() -> climberSubsystem.setBarPos(0), climberSubsystem));
-
-    //testController.b().onTrue(new InstantCommand(() -> climberSubsystem.setBarPos(Math.PI*8), climberSubsystem));
   }
 
 

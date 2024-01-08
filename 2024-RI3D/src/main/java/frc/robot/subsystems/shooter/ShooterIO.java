@@ -2,8 +2,6 @@ package frc.robot.subsystems.shooter;
 
 import org.littletonrobotics.junction.AutoLog;
 
-import com.fasterxml.jackson.databind.deser.impl.SetterlessProperty;
-
 /** Add your docs here. */
 public interface ShooterIO {
     @AutoLog
