@@ -1,19 +1,16 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.intake.Intake;
 
-public class Shoot extends CommandBase {
+public class ShootCommand extends CommandBase {
   Shooter shooter;
+  Intake intake;
 
-  private long initTime = -1;
-  private final long shootDuration = 1500;
+  private double RPS = 6000;
 
-  public Shoot(Shooter shooter) {
+  public ShootCommand(Shooter shooter) {
     addRequirements(shooter);
 
     this.shooter = shooter;
@@ -22,8 +19,7 @@ public class Shoot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initTime = System.currentTimeMillis();
-    shooter.setPowers(6, 12);
+    shooter.setPowers(12, 12);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,19 +31,15 @@ public class Shoot extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.setPowers(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    long currentTime = System.currentTimeMillis();
-    if (currentTime >= initTime + shootDuration)
+    if (shooter.getLRPS() > RPS && shooter.getRRPS() > RPS) {
       return true;
-    else;
+    } else {
       return false;
-  }
-
-  public static void addCommands(UnloadCommand unloadCommand) {
+    }
   }
 }

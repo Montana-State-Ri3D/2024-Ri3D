@@ -6,6 +6,7 @@ package frc.robot.subsystems.intake;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
@@ -28,5 +29,9 @@ public class Intake extends SubsystemBase {
 
   public void setPower(double power){
     io.setPower(power);
+  }
+
+  public boolean getBeamBreakValue() {
+    return inputs.beamBreak;
   }
 }

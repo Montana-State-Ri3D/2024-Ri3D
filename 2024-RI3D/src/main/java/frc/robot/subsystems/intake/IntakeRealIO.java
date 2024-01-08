@@ -7,18 +7,21 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.subsystems.intake.IntakeIO.IntakeIOInputs;
 
 public class IntakeRealIO {
     private CANSparkMax intakeMotor;
+    private DigitalInput beamBreak;
 
     private boolean isBrake;
     private boolean intakeUp;
 
     private RelativeEncoder intakeMotorEncoder;
 
-    public IntakeRealIO(int IDintakeMotor) {
+    public IntakeRealIO(int IDintakeMotor, int IDBeamBreak) {
         intakeMotor = new CANSparkMax(IDintakeMotor, MotorType.kBrushless);
+        beamBreak = new DigitalInput(IDBeamBreak);
 
         intakeMotor.restoreFactoryDefaults();
 
@@ -43,6 +46,7 @@ public class IntakeRealIO {
 
         inputs.curent = intakeMotor.getOutputCurrent();
         inputs.velocity = intakeMotorEncoder.getVelocity();
+        inputs.beamBreak = !beamBreak.get();
     }
 
     public void setPower(double power){

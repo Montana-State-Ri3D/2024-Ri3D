@@ -16,53 +16,63 @@ public class ArmRealIO implements ArmIO {
         boolean isBrake;
         double targetAngle;
 
-        private CANSparkMax arm;
-        private SparkMaxPIDController armPIDController;
-        private SparkMaxAbsoluteEncoder armAbsoluteEncoder;
+        private CANSparkMax armMotor_l;
+        private CANSparkMax armMotor_r;
+        private SparkMaxPIDController armPIDController_l;
+        private SparkMaxPIDController armPIDController_r;
+        private SparkMaxAbsoluteEncoder armAbsoluteEncoder_l;
+        private SparkMaxAbsoluteEncoder armAbsoluteEncoder_r;
 
-        public ArmRealIO(int armCANID) {
-            arm = new CANSparkMax(armCANID, MotorType.kBrushless);
-            armPIDController = arm.getPIDController();
-            armAbsoluteEncoder = arm.getAbsoluteEncoder(Type.kDutyCycle);
+        public ArmRealIO(int IDleftMotor, int IDrightMotor) {
+            armMotor_l = new CANSparkMax(IDleftMotor, MotorType.kBrushless);
+            armMotor_r = new CANSparkMax(IDrightMotor, MotorType.kBrushless);
 
-            armAbsoluteEncoder.setZeroOffset(ARM_Offset);
+            armPIDController_l = armMotor_l.getPIDController();
+            armPIDController_r = armMotor_r.getPIDController();
 
-            armAbsoluteEncoder.setPositionConversionFactor(Math.PI*2);
-            armAbsoluteEncoder.setVelocityConversionFactor(Math.PI*2/60);
+            armAbsoluteEncoder_l = armMotor_l.getAbsoluteEncoder(Type.kDutyCycle);
+            armAbsoluteEncoder_r = armMotor_r.getAbsoluteEncoder(Type.kDutyCycle);
+
+            armMotor_r.follow(armMotor_l);
+
+            armAbsoluteEncoder_l.setZeroOffset(ARM_Offset);
+
+            armAbsoluteEncoder_l.setPositionConversionFactor(Math.PI*2);
+            armAbsoluteEncoder_l.setVelocityConversionFactor(Math.PI*2/60);
             
-            armPIDController.setP(0.2);
-            armPIDController.setI(0);
-            armPIDController.setD(0);
+            armPIDController_l.setP(0.2);
+            armPIDController_l.setI(0);
+            armPIDController_l.setD(0);
 
-            armPIDController.setFeedbackDevice(armAbsoluteEncoder);
-            armPIDController.setOutputRange(-1, 1);
+            armPIDController_l.setFeedbackDevice(armAbsoluteEncoder_l);
+            armPIDController_l.setOutputRange(-1, 1);
 
-            arm.setIdleMode(CANSparkMax.IdleMode.kBrake);
+            armMotor_l.setIdleMode(CANSparkMax.IdleMode.kBrake);
             isBrake = true;
         }
 
 
         public void updateInputs(ArmIOInputs inputs) {
             inputs.isBrake = isBrake;
-            inputs.curent = arm.getOutputCurrent();
-            inputs.curentAngle = armAbsoluteEncoder.getPosition();
-            inputs.velocity = armAbsoluteEncoder.getVelocity();
+            inputs.curent = armMotor_l.getOutputCurrent();
+            inputs.curentAngle = armAbsoluteEncoder_l.getPosition();
+            inputs.velocity = armAbsoluteEncoder_l.getVelocity();
             inputs.targetAngle = targetAngle;
-            inputs.appliedPower = arm.getAppliedOutput();
+            inputs.appliedPower = armMotor_l.getAppliedOutput();
         }
 
         public void setBreakMode(boolean isBrake) {
             this.isBrake = isBrake;
             if (isBrake) {
-                arm.setIdleMode(CANSparkMax.IdleMode.kBrake);
+                armMotor_l.setIdleMode(CANSparkMax.IdleMode.kBrake);
             } else {
-                arm.setIdleMode(CANSparkMax.IdleMode.kCoast);
+                armMotor_l.setIdleMode(CANSparkMax.IdleMode.kCoast);
             }
         }
 
         public void setAngle(double angle) {
             targetAngle = angle;
-            armPIDController.setReference(angle, ControlType.kPosition);
+            armPIDController_l.setReference(angle, ControlType.kPosition);
         }
 
 }

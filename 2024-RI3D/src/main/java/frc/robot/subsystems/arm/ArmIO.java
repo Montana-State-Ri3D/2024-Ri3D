@@ -4,7 +4,6 @@ import org.littletonrobotics.junction.AutoLog;
 
 /** Add your docs here. */
 public interface ArmIO {
-
     @AutoLog
     class ArmIOInputs{
         public boolean isBrake;

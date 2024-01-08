@@ -4,7 +4,12 @@ import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.UnloadCommand;
+import frc.robot.commands.onPressedCommand;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.ShootCommand;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.StopShooterCommand;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
@@ -15,8 +20,11 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import static frc.robot.Constants.*;
+
+import java.util.function.DoubleSupplier;
 
 public class RobotContainer {
 
@@ -36,7 +44,11 @@ public class RobotContainer {
 
   private DriveCommand driveCommand;
 
-  private ClimberCommand climberCommand;
+  private SequentialCommandGroup shootRing;
+  private SequentialCommandGroup intakeRing;
+  private SequentialCommandGroup climber;
+
+  private DoubleSupplier wenchSpeed;
 
   private RobotIdentity identity;
 
@@ -65,19 +77,55 @@ public class RobotContainer {
     //climberCommand = new ClimberCommand(climberSubsystem,
     //    () -> -operatorController.getLeftY());
     //climberSubsystem.setDefaultCommand(climberCommand);
+
+    shootRing = new SequentialCommandGroup();
+
+    shootRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
+    shootRing.addCommands(new ShootCommand(shooterSubsystem));
+    shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
+    shootRing.addCommands(new WaitCommand(0.5));
+    shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
+
+    intakeRing = new SequentialCommandGroup();
+
+    intakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("INTAKE")));
+    intakeRing.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
+    intakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
+
+    climber = new SequentialCommandGroup();
+
+    climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCHSTANDBY")));
+    climber.addCommands(new onPressedCommand(() ->operatorController.rightBumper().getAsBoolean()));
+    climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCH")));
+    climber.addCommands(new ClimberCommand(climberSubsystem, () -> -operatorController.getLeftY()));
     
   }
 
+
+
   private void configureButtonBindings() {
 
+    // TESTING BINGDINGS A
+    // driveController.b().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(90)), driveTrainSubsystem));
+    // driveController.a().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(0)), driveTrainSubsystem));
+    // driveController.y().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(180)), driveTrainSubsystem));
+    // driveController.a().onTrue(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
+    // driveController.rightBumper().onTrue(shootRing);
+    // driveController.leftBumper().onTrue(intakeRing);
+    // driveController.leftBumper().onTrue(climber);
+
+    // TESTING BINGDINGS B
+    driveController.rightBumper().onTrue(shootRing);
+    // Amp leftbumper
+    driveController.a().onTrue(intakeRing);
+    operatorController.leftBumper().onTrue(climber);
+
+
+
+
+
+    // MISC BINGDINGS
     //driveController.rightBumper().onTrue(new Shoot(shooterSubsystem));
-
-    // Toggle Brake Mode with A
-    driveController.b().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(90)), driveTrainSubsystem));
-
-    driveController.a().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(0)), driveTrainSubsystem));
-
-    driveController.y().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(180)), driveTrainSubsystem));
 
     //testController.x().onTrue(new InstantCommand(() -> climberSubsystem.setBarPos(0), climberSubsystem));
 
