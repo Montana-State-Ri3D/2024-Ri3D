@@ -2,6 +2,8 @@ package frc.robot.subsystems.shooter;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import com.fasterxml.jackson.databind.deser.impl.SetterlessProperty;
+
 /** Add your docs here. */
 public interface ShooterIO {
     @AutoLog
@@ -13,6 +15,5 @@ public interface ShooterIO {
     }
     default void updateInputs(ShooterIOInputs inputs){}
     default void setPowers(double leftPower, double rightPower) {}
-    default void setWristAngle(double angle){}
-
+    default void setRPS(double leftRPS, double rightRPS) {}
 }

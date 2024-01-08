@@ -8,8 +8,6 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import java.util.HashMap;
-
 public class Arm extends SubsystemBase {
 
   private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
@@ -44,6 +42,9 @@ public class Arm extends SubsystemBase {
     }
     else if (position.equals("SHOOT")) {
       io.setAngle(160);
+    }
+    else if (position.equals("LATCHSTANDBY")) {
+      io.setAngle(90);
     }
     else if (position.equals("LATCH")) {
       io.setAngle(120);

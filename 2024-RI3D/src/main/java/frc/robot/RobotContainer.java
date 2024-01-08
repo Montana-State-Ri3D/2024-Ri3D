@@ -5,6 +5,7 @@ import frc.robot.subsystems.climber.Climber;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.UnloadCommand;
+import frc.robot.commands.onPressedCommand;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.IntakeCommand;
@@ -78,6 +79,7 @@ public class RobotContainer {
 
     shootRing = new SequentialCommandGroup();
 
+    shootRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
     shootRing.addCommands(new ShootCommand(shooterSubsystem));
     shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
@@ -89,12 +91,11 @@ public class RobotContainer {
     intakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
 
     climber = new SequentialCommandGroup();
-    
-    climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("AMP")));
-    climber.addCommands(new InstantCommand(() ->driveController.a().onTrue(new InstantCommand(() ->armSubsystem.setPosition("LATCH")))));
+
+    climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCHSTANDBY")));
+    climber.addCommands(new onPressedCommand(() ->driveController.x().getAsBoolean()));
+    climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCH")));
     climber.addCommands(new ClimberCommand(climberSubsystem, () -> -operatorController.getLeftY()));
-    
-    
     
   }
 
@@ -102,20 +103,27 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
-    //driveController.rightBumper().onTrue(new Shoot(shooterSubsystem));
+    // TESTING BINGDINGS A
+    // driveController.b().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(90)), driveTrainSubsystem));
+    // driveController.a().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(0)), driveTrainSubsystem));
+    // driveController.y().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(180)), driveTrainSubsystem));
+    // driveController.a().onTrue(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
+    // driveController.rightBumper().onTrue(shootRing);
+    // driveController.leftBumper().onTrue(intakeRing);
+    // driveController.leftBumper().onTrue(climber);
 
-    // Toggle Brake Mode with A
-    driveController.b().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(90)), driveTrainSubsystem));
-
-    driveController.a().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(0)), driveTrainSubsystem));
-
-    driveController.y().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(180)), driveTrainSubsystem));
-
-    driveController.a().onTrue(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
-
+    // TESTING BINGDINGS B
     driveController.rightBumper().onTrue(shootRing);
-    
-    driveController.leftBumper().onTrue(intakeRing);
+    // Amp leftbumper
+    driveController.a().onTrue(intakeRing);
+    driveController.y().onTrue(climber);
+
+
+
+
+
+    // MISC BINGDINGS
+    //driveController.rightBumper().onTrue(new Shoot(shooterSubsystem));
 
     //testController.x().onTrue(new InstantCommand(() -> climberSubsystem.setBarPos(0), climberSubsystem));
 
