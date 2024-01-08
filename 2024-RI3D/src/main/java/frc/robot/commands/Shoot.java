@@ -47,4 +47,7 @@ public class Shoot extends CommandBase {
     else;
       return false;
   }
+
+  public static void addCommands(UnloadCommand unloadCommand) {
+  }
 }
