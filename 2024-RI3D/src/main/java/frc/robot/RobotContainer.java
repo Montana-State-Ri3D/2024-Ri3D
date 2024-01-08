@@ -106,19 +106,16 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // TESTING BINGDINGS A
-    // driveController.b().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(90)), driveTrainSubsystem));
-    // driveController.a().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(0)), driveTrainSubsystem));
-    // driveController.y().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(180)), driveTrainSubsystem));
-    // driveController.a().onTrue(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
-    // driveController.rightBumper().onTrue(shootRing);
-    // driveController.leftBumper().onTrue(intakeRing);
-    // driveController.leftBumper().onTrue(climber);
+    testController.a().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(0))));
+    testController.b().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(-90))));
+    testController.x().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(-180))));
 
-    // TESTING BINGDINGS B
+    // BINGDING CONFIG A
     driveController.rightBumper().onTrue(shootRing);
-    // Amp leftbumper
     driveController.a().onTrue(intakeRing);
     operatorController.leftBumper().onTrue(climber);
+
+  
 
 
 
