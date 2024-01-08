@@ -68,7 +68,7 @@ public final class SubsystemFactory {
                 return new Arm(new ArmSimIO());
             default:
                 // return new Arm(new ArmSimIO());
-                return new Arm(new ArmRealIO(ARM_MOTOR));
+                return new Arm(new ArmRealIO(ARM_MOTOR_LEFT, ARM_MOTOR_RIGHT));
         }
     }
 }
