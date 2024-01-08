@@ -28,7 +28,7 @@ public class ArmRealIO implements ArmIO {
             armMotor_r.setIdleMode(CANSparkMax.IdleMode.kBrake);
             isBrake = true;
 
-            armPIDController = armMotor_l.getPIDController();
+            armPIDController = armMotor_r.getPIDController();
 
             armAbsoluteEncoder = armMotor_r.getAbsoluteEncoder(Type.kDutyCycle);
 
@@ -44,7 +44,10 @@ public class ArmRealIO implements ArmIO {
             armPIDController.setD(0);
 
             armPIDController.setFeedbackDevice(armAbsoluteEncoder);
-            armPIDController.setOutputRange(-0.25, 0.25);            
+            armPIDController.setOutputRange(-0.25, 0.25);   
+            
+            armMotor_r.setSmartCurrentLimit(10);
+            armMotor_l.setSmartCurrentLimit(10);
         }
 
 

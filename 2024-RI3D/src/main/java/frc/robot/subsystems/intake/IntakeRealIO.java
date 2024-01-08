@@ -23,14 +23,14 @@ public class IntakeRealIO implements IntakeIO {
 
         intakeMotorEncoder = intakeMotor.getEncoder();
 
-        intakeMotor.setSmartCurrentLimit(45);
+        intakeMotor.setSmartCurrentLimit(10);
 
         intakeMotor.setIdleMode(IdleMode.kCoast);
 
         intakeMotor.setInverted(true);
 
-        intakeMotorEncoder.setPositionConversionFactor(INTAKE_MOTOR*Math.PI*2);
-        intakeMotorEncoder.setVelocityConversionFactor(INTAKE_MOTOR*Math.PI*2/60);
+        intakeMotorEncoder.setPositionConversionFactor(INTAKE_RADIO*Math.PI*2);
+        intakeMotorEncoder.setVelocityConversionFactor(INTAKE_RADIO*Math.PI*2/60);
 
         isBrake = false;
     }
@@ -40,6 +40,7 @@ public class IntakeRealIO implements IntakeIO {
         inputs.curent = intakeMotor.getOutputCurrent();
         inputs.velocity = intakeMotorEncoder.getVelocity();
         inputs.beamBreak = beamBreak.get();
+        inputs.position = intakeMotorEncoder.getPosition();
     }
 
     public void setPower(double power){

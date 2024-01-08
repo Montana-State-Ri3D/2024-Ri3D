@@ -11,6 +11,7 @@ public interface IntakeIO {
         public double curent;
         public double velocity;
         public boolean beamBreak;
+        public double position;
     }
     default void updateInputs(IntakeIOInputs inputs){}
     default void setPower(double power) {}

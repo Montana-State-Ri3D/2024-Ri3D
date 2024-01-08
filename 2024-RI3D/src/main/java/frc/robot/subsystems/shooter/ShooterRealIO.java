@@ -34,14 +34,17 @@ public class ShooterRealIO implements ShooterIO {
         leftMotorEncoder = leftMotor.getEncoder();
         rightMotorEncoder = rightMotor.getEncoder();
 
-        leftMotor.setInverted(true);
-        rightMotor.setInverted(false);
+        leftMotor.setInverted(false);
+        rightMotor.setInverted(true);
 
-        leftMotor.setSmartCurrentLimit(40);
-        rightMotor.setSmartCurrentLimit(40);
+        leftMotor.setSmartCurrentLimit(10);
+        rightMotor.setSmartCurrentLimit(10);
 
         leftMotorEncoder.setVelocityConversionFactor(SHOOTER_RADIO*2*Math.PI/60);
         rightMotorEncoder.setVelocityConversionFactor(SHOOTER_RADIO*2*Math.PI/60);
+
+        leftMotorEncoder.setPositionConversionFactor(SHOOTER_RADIO*2*Math.PI);
+        rightMotorEncoder.setPositionConversionFactor(SHOOTER_RADIO*2*Math.PI);
 
         leftPIDController.setP(p);
         leftPIDController.setI(i);
@@ -62,6 +65,8 @@ public class ShooterRealIO implements ShooterIO {
         inputs.rightCurent = rightMotor.getOutputCurrent();
         inputs.leftVelocity = leftMotorEncoder.getVelocity();
         inputs.rightVelocity = rightMotorEncoder.getVelocity();
+        inputs.leftPosition = leftMotorEncoder.getPosition();
+        inputs.rightPosition = rightMotorEncoder.getPosition();
     }
 
     public void setPowers(double leftPower, double rightPower) {
