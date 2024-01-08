@@ -43,7 +43,7 @@ public class IntakeRealIO implements IntakeIO {
     }
 
     public void setPower(double power){
-        intakeMotor.set(power*12);
+        intakeMotor.set(power);
     }
 
     public void setBrake(boolean brake){

@@ -4,11 +4,11 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class onPressedCommand extends CommandBase {
+public class WaitTillPressed extends CommandBase {
 
     private BooleanSupplier cancel;
 
-    public onPressedCommand(BooleanSupplier cancel){
+    public WaitTillPressed(BooleanSupplier cancel){
         this.cancel = cancel;
 
     }

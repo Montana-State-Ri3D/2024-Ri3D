@@ -8,10 +8,15 @@ public class ShootCommand extends CommandBase {
   Shooter shooter;
   Intake intake;
 
-  private double RPS = 6000;
+  private double RPS;
+  private double power;
 
-  public ShootCommand(Shooter shooter) {
+  public ShootCommand(Shooter shooter, double power, double RPS) {
     addRequirements(shooter);
+
+    this.RPS = RPS;
+    this.power = power;
+
 
     this.shooter = shooter;
   }
@@ -19,7 +24,7 @@ public class ShootCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setPowers(12, 12);
+    shooter.setPowers(power, power);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

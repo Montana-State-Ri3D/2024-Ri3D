@@ -5,7 +5,7 @@ import frc.robot.subsystems.climber.Climber;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.UnloadCommand;
-import frc.robot.commands.onPressedCommand;
+import frc.robot.commands.WaitTillPressed;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.StopShooterCommand;
@@ -74,7 +74,8 @@ public class RobotContainer {
     shootRing = new SequentialCommandGroup();
 
     shootRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
-    shootRing.addCommands(new ShootCommand(shooterSubsystem));
+    //TODO Check if the arm is in the right position
+    shootRing.addCommands(new ShootCommand(shooterSubsystem, 0.5,2000));
     shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new WaitCommand(0.5));
     shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
@@ -88,8 +89,9 @@ public class RobotContainer {
     climber = new SequentialCommandGroup();
 
     climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCHSTANDBY")));
-    climber.addCommands(new onPressedCommand(() ->operatorController.rightBumper().getAsBoolean()));
+    climber.addCommands(new WaitTillPressed(() ->operatorController.rightBumper().getAsBoolean()));
     climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCH")));
+    //TODO Set Arm to Cost Mode
     climber.addCommands(new ClimberCommand(climberSubsystem, () -> operatorController.getLeftY()));
     
   }
