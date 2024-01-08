@@ -20,6 +20,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import static frc.robot.Constants.*;
 
@@ -82,6 +83,7 @@ public class RobotContainer {
     shootRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
     shootRing.addCommands(new ShootCommand(shooterSubsystem));
     shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
+    shootRing.addCommands(new WaitCommand(0.5));
     shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
 
     intakeRing = new SequentialCommandGroup();
@@ -93,7 +95,7 @@ public class RobotContainer {
     climber = new SequentialCommandGroup();
 
     climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCHSTANDBY")));
-    climber.addCommands(new onPressedCommand(() ->driveController.x().getAsBoolean()));
+    climber.addCommands(new onPressedCommand(() ->operatorController.rightBumper().getAsBoolean()));
     climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCH")));
     climber.addCommands(new ClimberCommand(climberSubsystem, () -> -operatorController.getLeftY()));
     
@@ -116,7 +118,7 @@ public class RobotContainer {
     driveController.rightBumper().onTrue(shootRing);
     // Amp leftbumper
     driveController.a().onTrue(intakeRing);
-    driveController.y().onTrue(climber);
+    operatorController.leftBumper().onTrue(climber);
 
 
 
