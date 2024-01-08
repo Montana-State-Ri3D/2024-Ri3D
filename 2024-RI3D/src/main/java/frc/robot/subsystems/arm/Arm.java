@@ -38,16 +38,16 @@ public class Arm extends SubsystemBase {
       io.setAngle(0);
     }
     else if (position.equals("AMP")) {
-      io.setAngle(90);
+      io.setAngle(-90);
     }
     else if (position.equals("SHOOT")) {
-      io.setAngle(160);
+      io.setAngle(-160);
     }
     else if (position.equals("LATCHSTANDBY")) {
-      io.setAngle(90);
+      io.setAngle(-90);
     }
     else if (position.equals("LATCH")) {
-      io.setAngle(120);
+      io.setAngle(-120);
     }
   }
 
