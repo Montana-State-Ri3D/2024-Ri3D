@@ -8,6 +8,8 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import java.util.HashMap;
+
 public class Arm extends SubsystemBase {
 
   private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
@@ -20,6 +22,8 @@ public class Arm extends SubsystemBase {
     this.io = io;
   }
 
+ 
+
   @Override
   public void periodic() {
     io.updateInputs(inputs);
@@ -28,6 +32,19 @@ public class Arm extends SubsystemBase {
   }
   public void setArmAngle(double angle) {
     io.setAngle(angle);
+
+  }
+
+  public void setPosition (String position) {
+    if (position.equals("INTAKE")) {
+      io.setAngle(0);
+    }
+    else if (position.equals("AMP")) {
+      io.setAngle(90);
+    }
+    else if (position.equals("SHOOT")) {
+      io.setAngle(180);
+    }
   }
 
   

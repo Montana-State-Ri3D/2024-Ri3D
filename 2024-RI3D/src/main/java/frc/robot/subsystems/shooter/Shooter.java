@@ -40,4 +40,12 @@ public class Shooter extends SubsystemBase {
     logger.recordOutput("Shooter/RightPower", rightPower);
     logger.recordOutput("Shooter/LeftPower", leftPower);
   }
+
+  public double getLRPS() {
+    return inputs.leftVelocity;
+  }
+
+  public double getRRPS() {
+    return inputs.rightVelocity;
+  }
 }

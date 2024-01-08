@@ -23,6 +23,9 @@ public final class Constants {
 
     public static final int PDP_CAN_ID = 0;
 
+    // Sensors
+    public static final int INTAKE_BEAM_BREAK = 0;
+
     // Drive Motors
     public static final int LEFT_FRONT_MOTOR = 1;
     public static final int LEFT_BACK_MOTOR = 2;
@@ -34,13 +37,15 @@ public final class Constants {
 
     public static final int INTAKE_MOTOR = 5;
 
-    public static final int ARM_MOTOR = 6;
+    public static final int ARM_MOTOR_LEFT = 6;
+    public static final int ARM_MOTOR_RIGHT = 7;
 
     public static final int SHOOTER_LEFT = 10;
     public static final int SHOOTER_RIGHT = 11;
 
     public static final double ARM_Offset = Units.degreesToRadians(75);
 
+    // Radios
     public static final double INTAKE_RADIO = (1.0/4.0);
     public static final double SHOOTER_RADIO = (1.0/4.0);
     public static final double CLIMB_RADIO = (1.0/4.0);

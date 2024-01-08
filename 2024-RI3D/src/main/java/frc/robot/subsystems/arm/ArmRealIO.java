@@ -16,14 +16,19 @@ public class ArmRealIO implements ArmIO {
         boolean isBrake;
         double targetAngle;
 
-        private CANSparkMax arm;
+        private CANSparkMax armMotor_l;
+        private CANSparkMax armMotor_r;
         private SparkMaxPIDController armPIDController;
         private SparkMaxAbsoluteEncoder armAbsoluteEncoder;
 
-        public ArmRealIO(int armCANID) {
-            arm = new CANSparkMax(armCANID, MotorType.kBrushless);
-            armPIDController = arm.getPIDController();
-            armAbsoluteEncoder = arm.getAbsoluteEncoder(Type.kDutyCycle);
+        public ArmRealIO(int IDleftMotor, int IDrightMotor) {
+            armMotor_l = new CANSparkMax(IDleftMotor, MotorType.kBrushless);
+            armMotor_r = new CANSparkMax(IDrightMotor, MotorType.kBrushless);
+
+            armPIDController = armMotor_l.getPIDController();
+            armAbsoluteEncoder = armMotor_l.getAbsoluteEncoder(Type.kDutyCycle);
+
+            armMotor_r.follow(armMotor_l);
 
             armAbsoluteEncoder.setZeroOffset(ARM_Offset);
 
@@ -37,26 +42,26 @@ public class ArmRealIO implements ArmIO {
             armPIDController.setFeedbackDevice(armAbsoluteEncoder);
             armPIDController.setOutputRange(-1, 1);
 
-            arm.setIdleMode(CANSparkMax.IdleMode.kBrake);
+            armMotor_l.setIdleMode(CANSparkMax.IdleMode.kBrake);
             isBrake = true;
         }
 
 
         public void updateInputs(ArmIOInputs inputs) {
             inputs.isBrake = isBrake;
-            inputs.curent = arm.getOutputCurrent();
+            inputs.curent = armMotor_l.getOutputCurrent();
             inputs.curentAngle = armAbsoluteEncoder.getPosition();
             inputs.velocity = armAbsoluteEncoder.getVelocity();
             inputs.targetAngle = targetAngle;
-            inputs.appliedPower = arm.getAppliedOutput();
+            inputs.appliedPower = armMotor_l.getAppliedOutput();
         }
 
         public void setBreakMode(boolean isBrake) {
             this.isBrake = isBrake;
             if (isBrake) {
-                arm.setIdleMode(CANSparkMax.IdleMode.kBrake);
+                armMotor_l.setIdleMode(CANSparkMax.IdleMode.kBrake);
             } else {
-                arm.setIdleMode(CANSparkMax.IdleMode.kCoast);
+                armMotor_l.setIdleMode(CANSparkMax.IdleMode.kCoast);
             }
         }
 

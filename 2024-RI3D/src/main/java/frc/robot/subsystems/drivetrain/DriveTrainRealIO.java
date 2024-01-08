@@ -20,6 +20,7 @@ public class DriveTrainRealIO implements DriveTrainIO {
 
     private boolean isBrake;
 
+
     public DriveTrainRealIO(int IDleftMotor_1, int IDleftMotor_2, int IDrightMotor_1, int IDrightMotor_2) {
         leftMotor_1 = new TalonSRX(LEFT_FRONT_MOTOR);
         leftMotor_2 = new TalonSRX(LEFT_BACK_MOTOR);
