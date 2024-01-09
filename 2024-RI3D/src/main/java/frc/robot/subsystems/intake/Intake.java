@@ -17,6 +17,7 @@ public class Intake extends SubsystemBase {
 
   public Intake(IntakeIO io) {
     this.io = io;
+
   }
 
   @Override
@@ -24,9 +25,16 @@ public class Intake extends SubsystemBase {
     io.updateInputs(inputs);
 
     logger.processInputs("Intake/Inputs", inputs);
+
+    if (this.getCurrentCommand() != null) {
+
+      logger.recordOutput("Intake/CurentCommand", this.getCurrentCommand().getName());
+    } else {
+      logger.recordOutput("Intake/CurentCommand", "none");
+    }
   }
 
-  public void setPower(double power){
+  public void setPower(double power) {
     io.setPower(power);
   }
 

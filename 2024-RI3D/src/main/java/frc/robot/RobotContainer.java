@@ -5,7 +5,6 @@ import frc.robot.subsystems.climber.Climber;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.UnloadCommand;
-import frc.robot.commands.WaitTillPressed;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.StopShooterCommand;
@@ -15,7 +14,6 @@ import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.utility.RobotIdentity;
 import frc.robot.utility.SubsystemFactory;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -43,8 +41,9 @@ public class RobotContainer {
 
   private SequentialCommandGroup shootRing;
   private SequentialCommandGroup intakeRing;
+  private SequentialCommandGroup hiIntake;
   private SequentialCommandGroup climber;
-  private SequentialCommandGroup feederIntakeRing;
+  private SequentialCommandGroup feederPlace;
 
   private RobotIdentity identity;
 
@@ -65,59 +64,58 @@ public class RobotContainer {
   }
 
   private void createCommands() {
-    defaultDriveCommand = new DriveCommand(driveTrainSubsystem,() -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),() -> -driveController.getLeftX());
+    defaultDriveCommand = new DriveCommand(driveTrainSubsystem,
+        () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
+        () -> -driveController.getLeftX());
     driveTrainSubsystem.setDefaultCommand(defaultDriveCommand);
-
-    //climberCommand = new ClimberCommand(climberSubsystem,
-    //    () -> -operatorController.getLeftY());
-    //climberSubsystem.setDefaultCommand(climberCommand);
 
     shootRing = new SequentialCommandGroup();
 
-    shootRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
-    //TODO Check if the arm is in the right position
-    shootRing.addCommands(new ShootCommand(shooterSubsystem, 0.8,0.8));
+    shootRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
+    // TODO Check if the arm is in the right position
+    shootRing.addCommands(new ShootCommand(shooterSubsystem, 0.8, 0.8));
     shootRing.addCommands(new WaitCommand(2));
     shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
-    shootRing.addCommands(new WaitCommand(1));
     shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
 
     intakeRing = new SequentialCommandGroup();
 
-    intakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("INTAKE")));
+    intakeRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("INTAKE")));
     intakeRing.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
-    intakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
+    intakeRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
 
-    feederIntakeRing = new SequentialCommandGroup();
+    hiIntake = new SequentialCommandGroup();
 
-    feederIntakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("AMP")));
-    feederIntakeRing.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
-    feederIntakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
+    hiIntake.addCommands(new InstantCommand(() -> armSubsystem.setPosition("HI_INTAKE")));
+    hiIntake.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
+    hiIntake.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
+
+    feederPlace = new SequentialCommandGroup();
+
+    feederPlace.addCommands(new InstantCommand(() -> armSubsystem.setPosition("AMP")));
+    feederPlace.addCommands(new WaitCommand(1));
+    feederPlace.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
+    feederPlace.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
 
     climber = new SequentialCommandGroup();
 
-    //climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCHSTANDBY")));
-    //climber.addCommands(new WaitTillPressed(() ->operatorController.rightBumper().getAsBoolean()));
-    //climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCH")));
-    //TODO Set Arm to Cost Mode
-    climber.addCommands(new ClimberCommand(climberSubsystem, () -> driveController.getRightY(),armSubsystem));
-    
+    climber.addCommands(new InstantCommand(() -> armSubsystem.setPosition("CLIMB")));
+    climber.addCommands(new ClimberCommand(climberSubsystem, () -> driveController.getRightY(), armSubsystem,
+        () -> driveController.b().getAsBoolean()));
+
   }
-
-
 
   private void configureButtonBindings() {
 
-    // TESTING BINGDINGS A
-    //testController.y().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(180.0))));
-    //testController.x().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(90.0))));
-    //testController.b().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(270.0))));
-    //testController.a().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(42.0))));
-    // BINGDING CONFIG A
     driveController.rightBumper().onTrue(shootRing);
     driveController.a().onTrue(intakeRing);
     driveController.leftBumper().onTrue(climber);
-    driveController.x().onTrue(feederIntakeRing);
+    driveController.y().onTrue(feederPlace);
+    driveController.x().onTrue(hiIntake);
+
+    driveController.povLeft().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCH")));
+    driveController.povUp().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCHSTANDBY")));
+    driveController.povDown().onTrue(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
   }
 
   public Command getAutonomousCommand() {

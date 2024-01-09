@@ -29,6 +29,13 @@ public class Arm extends SubsystemBase {
     io.updateInputs(inputs);
 
     logger.processInputs("Arm/Inputs", inputs);
+
+    if (this.getCurrentCommand() != null) {
+
+      logger.recordOutput("Arm/CurentCommand", this.getCurrentCommand().getName());
+    } else {
+      logger.recordOutput("Arm/CurentCommand", "none");
+    }
   }
 
   public void setArmAngle(double angle) {
@@ -48,15 +55,19 @@ public class Arm extends SubsystemBase {
     logger.recordOutput("Arm/Position", position);
 
     if (position.equals("INTAKE")) {
-      setArmAngle(Units.degreesToRadians(171));
+      setArmAngle(Units.degreesToRadians(38));
     } else if (position.equals("AMP")) {
-      setArmAngle(Units.degreesToRadians(90));
+      setArmAngle(Units.degreesToRadians(171));
     } else if (position.equals("SHOOT")) {
       setArmAngle(Units.degreesToRadians(274));
     } else if (position.equals("LATCHSTANDBY")) {
-      setArmAngle(Units.degreesToRadians(90));
+      setArmAngle(Units.degreesToRadians(171));
     } else if (position.equals("LATCH")) {
-      setArmAngle(Units.degreesToRadians(90));
+      setArmAngle(Units.degreesToRadians(227));
+    } else if (position.equals("CLIMB")){
+      setArmAngle(Units.degreesToRadians(277));
+    }else if (position.equals("HI_INTAKE")){
+      setArmAngle(Units.degreesToRadians(162));
     }
   }
 

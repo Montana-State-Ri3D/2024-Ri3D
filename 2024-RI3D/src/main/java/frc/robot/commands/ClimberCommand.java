@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.util.Units;
@@ -15,12 +16,14 @@ public class ClimberCommand extends CommandBase {
   private final Arm armSubsystem;
 
   private final DoubleSupplier wenchSpeed;
+  private final BooleanSupplier cancel;
   private double wenchPower;
 
-  public ClimberCommand(Climber climberSubsystem, DoubleSupplier wenchSpeed, Arm armSubsystem) {
+  public ClimberCommand(Climber climberSubsystem, DoubleSupplier wenchSpeed, Arm armSubsystem, BooleanSupplier cancle) {
     this.climberSubsystem = climberSubsystem;
     this.wenchSpeed = wenchSpeed;
     this.armSubsystem = armSubsystem;
+    this.cancel = cancle;
     addRequirements(climberSubsystem);
   }
 
@@ -50,6 +53,6 @@ public class ClimberCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return cancel.getAsBoolean();
   }
 }
