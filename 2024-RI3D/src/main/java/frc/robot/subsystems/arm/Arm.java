@@ -37,7 +37,6 @@ public class Arm extends SubsystemBase {
     } else if (angle < ARM_MIN_ANGLE) {
       System.out.println("Arm angle is too small");
     }
-
     else {
       io.setAngle(angle);
     }
@@ -49,16 +48,19 @@ public class Arm extends SubsystemBase {
     logger.recordOutput("Arm/Position", position);
 
     if (position.equals("INTAKE")) {
-      setArmAngle(Units.degreesToRadians(0));
+      setArmAngle(Units.degreesToRadians(171));
     } else if (position.equals("AMP")) {
-      setArmAngle(Units.degreesToRadians(0));
+      setArmAngle(Units.degreesToRadians(90));
     } else if (position.equals("SHOOT")) {
-      setArmAngle(Units.degreesToRadians(0));
+      setArmAngle(Units.degreesToRadians(274));
     } else if (position.equals("LATCHSTANDBY")) {
-      setArmAngle(Units.degreesToRadians(0));
+      setArmAngle(Units.degreesToRadians(90));
     } else if (position.equals("LATCH")) {
-      setArmAngle(Units.degreesToRadians(0));
+      setArmAngle(Units.degreesToRadians(90));
     }
   }
 
+  public double getAngle() {
+    return inputs.curentAngle;
+  }
 }

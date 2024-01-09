@@ -2,7 +2,6 @@ package frc.robot.subsystems.arm;
 
 import static frc.robot.Constants.*;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -44,7 +43,7 @@ public class ArmRealIO implements ArmIO {
             armAbsoluteEncoder.setVelocityConversionFactor(Math.PI*2/60);
             
             armPIDController.setP(0.4);
-            armPIDController.setI(0);
+            armPIDController.setI(0.0);
             armPIDController.setD(0.00001);
 
             armPIDController.setFeedbackDevice(armAbsoluteEncoder);

@@ -64,8 +64,8 @@ public class RobotContainer {
   }
 
   private void createCommands() {
-    //defaultDriveCommand = new DriveCommand(driveTrainSubsystem,() -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),() -> -driveController.getLeftX());
-    //driveTrainSubsystem.setDefaultCommand(defaultDriveCommand);
+    defaultDriveCommand = new DriveCommand(driveTrainSubsystem,() -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),() -> -driveController.getLeftX());
+    driveTrainSubsystem.setDefaultCommand(defaultDriveCommand);
 
     //climberCommand = new ClimberCommand(climberSubsystem,
     //    () -> -operatorController.getLeftY());
@@ -73,18 +73,19 @@ public class RobotContainer {
 
     shootRing = new SequentialCommandGroup();
 
-    //shootRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
+    shootRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
     //TODO Check if the arm is in the right position
-    //shootRing.addCommands(new ShootCommand(shooterSubsystem, 0.6,2000));
-    //shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
-    //shootRing.addCommands(new WaitCommand(0.5));
-    //shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
+    shootRing.addCommands(new ShootCommand(shooterSubsystem, 0.8,0.8));
+    shootRing.addCommands(new WaitCommand(2));
+    shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
+    shootRing.addCommands(new WaitCommand(1));
+    shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
 
     intakeRing = new SequentialCommandGroup();
 
-    //intakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("INTAKE")));
-    //intakeRing.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
-    //intakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
+    intakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("INTAKE")));
+    intakeRing.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
+    intakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
 
     climber = new SequentialCommandGroup();
 
@@ -92,7 +93,7 @@ public class RobotContainer {
     //climber.addCommands(new WaitTillPressed(() ->operatorController.rightBumper().getAsBoolean()));
     //climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCH")));
     //TODO Set Arm to Cost Mode
-    //climber.addCommands(new ClimberCommand(climberSubsystem, () -> operatorController.getLeftY()));
+    climber.addCommands(new ClimberCommand(climberSubsystem, () -> driveController.getRightY(),armSubsystem));
     
   }
 
@@ -101,14 +102,14 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // TESTING BINGDINGS A
-    testController.a().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(180.0))));
-    testController.b().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(90.0))));
-    //testController.x().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(-180))));
-
+    //testController.y().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(180.0))));
+    //testController.x().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(90.0))));
+    //testController.b().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(270.0))));
+    //testController.a().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(42.0))));
     // BINGDING CONFIG A
-    //driveController.rightBumper().onTrue(shootRing);
-    //driveController.a().onTrue(intakeRing);
-    //operatorController.leftBumper().onTrue(climber);
+    driveController.rightBumper().onTrue(shootRing);
+    driveController.a().onTrue(intakeRing);
+    driveController.leftBumper().onTrue(climber);
   }
 
 

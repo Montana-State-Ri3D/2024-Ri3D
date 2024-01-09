@@ -37,8 +37,8 @@ public class ShooterRealIO implements ShooterIO {
         leftMotor.setInverted(false);
         rightMotor.setInverted(true);
 
-        leftMotor.setSmartCurrentLimit(10);
-        rightMotor.setSmartCurrentLimit(10);
+        leftMotor.setSmartCurrentLimit(80);
+        rightMotor.setSmartCurrentLimit(80);
 
         leftMotorEncoder.setVelocityConversionFactor(SHOOTER_RADIO*2*Math.PI/60);
         rightMotorEncoder.setVelocityConversionFactor(SHOOTER_RADIO*2*Math.PI/60);

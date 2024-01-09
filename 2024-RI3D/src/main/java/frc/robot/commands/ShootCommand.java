@@ -8,15 +8,15 @@ public class ShootCommand extends CommandBase {
   Shooter shooter;
   Intake intake;
 
-  private double RPS;
-  private double power;
+  private double Lpower;
+  private double Rpower;
 
-  public ShootCommand(Shooter shooter, double power, double RPS) {
+  public ShootCommand(Shooter shooter, double Lpower,double Rpower) {
     addRequirements(shooter);
+    System.out.println("Creating Shoot");
 
-    this.RPS = RPS;
-    this.power = power;
-
+    this.Lpower = Lpower;
+    this.Rpower = Rpower;
 
     this.shooter = shooter;
   }
@@ -24,13 +24,14 @@ public class ShootCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setPowers(power, power);
+    shooter.setPowers(Lpower, Rpower);
+    System.out.println("Spining up");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+
   }
 
   // Called once the command ends or is interrupted.
@@ -41,10 +42,6 @@ public class ShootCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (shooter.getLRPS() > RPS && shooter.getRRPS() > RPS) {
-      return true;
-    } else {
-      return false;
-    }
+    return true;
   }
 }

@@ -19,9 +19,9 @@ public class ClimberRealIO implements ClimberIO {
 
         climberWenchMotorEncoder = climberWenchMotor.getEncoder();
         //Config
-        climberWenchMotor.setSmartCurrentLimit(10);
+        climberWenchMotor.setSmartCurrentLimit(40);
 
-        climberWenchMotor.setIdleMode(IdleMode.kCoast);
+        climberWenchMotor.setIdleMode(IdleMode.kBrake);
 
         climberWenchMotor.setInverted(true);
 
