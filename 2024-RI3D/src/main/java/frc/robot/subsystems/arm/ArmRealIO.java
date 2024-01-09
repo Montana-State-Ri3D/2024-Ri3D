@@ -43,15 +43,15 @@ public class ArmRealIO implements ArmIO {
             armAbsoluteEncoder.setPositionConversionFactor(Math.PI*2);
             armAbsoluteEncoder.setVelocityConversionFactor(Math.PI*2/60);
             
-            armPIDController.setP(0.001);
+            armPIDController.setP(0.4);
             armPIDController.setI(0);
-            armPIDController.setD(0);
+            armPIDController.setD(0.00001);
 
             armPIDController.setFeedbackDevice(armAbsoluteEncoder);
-            armPIDController.setOutputRange(-0.25, 0.25);   
+            armPIDController.setOutputRange(-1.00, 1.00);   
             
-            armMotor_r.setSmartCurrentLimit(5);
-            armMotor_l.setSmartCurrentLimit(5);
+            armMotor_r.setSmartCurrentLimit(80);
+            armMotor_l.setSmartCurrentLimit(80);
         }
 
 
