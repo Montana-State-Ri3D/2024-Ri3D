@@ -44,7 +44,6 @@ public final class SubsystemFactory {
             case SIMULATION:
                 return new Shooter(new ShooterSimIO());
             default:
-                // return new Shooter(new ShooterSimIO());
                 return new Shooter(new ShooterRealIO(SHOOTER_LEFT, SHOOTER_RIGHT));
 
         }

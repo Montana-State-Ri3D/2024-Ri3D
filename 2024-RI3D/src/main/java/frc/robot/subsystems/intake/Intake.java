@@ -24,7 +24,7 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
 
-    logger.processInputs("Intake/Inputs", inputs);
+    logger.processInputs("Intake", inputs);
 
     if (this.getCurrentCommand() != null) {
 

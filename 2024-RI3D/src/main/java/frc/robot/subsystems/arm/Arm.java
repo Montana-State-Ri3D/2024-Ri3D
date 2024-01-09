@@ -28,7 +28,7 @@ public class Arm extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
 
-    logger.processInputs("Arm/Inputs", inputs);
+    logger.processInputs("Arm", inputs);
 
     if (this.getCurrentCommand() != null) {
 
@@ -63,11 +63,11 @@ public class Arm extends SubsystemBase {
     } else if (position.equals("LATCHSTANDBY")) {
       setArmAngle(Units.degreesToRadians(171));
     } else if (position.equals("LATCH")) {
-      setArmAngle(Units.degreesToRadians(227));
+      setArmAngle(Units.degreesToRadians(217));
     } else if (position.equals("CLIMB")){
       setArmAngle(Units.degreesToRadians(277));
     }else if (position.equals("HI_INTAKE")){
-      setArmAngle(Units.degreesToRadians(162));
+      setArmAngle(Units.degreesToRadians(153));
     }
   }
 

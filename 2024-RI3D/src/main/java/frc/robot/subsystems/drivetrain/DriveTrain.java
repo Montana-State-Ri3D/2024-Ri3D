@@ -20,7 +20,7 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
 
-    logger.processInputs("DriveTrain/Inputs", inputs);
+    logger.processInputs("DriveTrain", inputs);
 
     if (this.getCurrentCommand() != null) {
 

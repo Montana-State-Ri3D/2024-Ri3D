@@ -56,7 +56,7 @@ public class ArmRealIO implements ArmIO {
 
         public void updateInputs(ArmIOInputs inputs) {
             inputs.isBrake = isBrake;
-            inputs.curent = armMotor_r.getOutputCurrent();
+            inputs.curent = armMotor_r.getOutputCurrent()+ armMotor_l.getOutputCurrent();
             inputs.curentAngle = armAbsoluteEncoder.getPosition();
             inputs.velocity = armAbsoluteEncoder.getVelocity();
             inputs.targetAngle = targetAngle;
