@@ -75,24 +75,24 @@ public class RobotContainer {
 
     //shootRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
     //TODO Check if the arm is in the right position
-    shootRing.addCommands(new ShootCommand(shooterSubsystem, 0.6,2000));
-    shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
-    shootRing.addCommands(new WaitCommand(0.5));
-    shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
+    //shootRing.addCommands(new ShootCommand(shooterSubsystem, 0.6,2000));
+    //shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
+    //shootRing.addCommands(new WaitCommand(0.5));
+    //shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
 
     intakeRing = new SequentialCommandGroup();
 
     //intakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("INTAKE")));
-    intakeRing.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
+    //intakeRing.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     //intakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
 
     climber = new SequentialCommandGroup();
 
     //climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCHSTANDBY")));
-    climber.addCommands(new WaitTillPressed(() ->operatorController.rightBumper().getAsBoolean()));
+    //climber.addCommands(new WaitTillPressed(() ->operatorController.rightBumper().getAsBoolean()));
     //climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCH")));
     //TODO Set Arm to Cost Mode
-    climber.addCommands(new ClimberCommand(climberSubsystem, () -> operatorController.getLeftY()));
+    //climber.addCommands(new ClimberCommand(climberSubsystem, () -> operatorController.getLeftY()));
     
   }
 
@@ -101,8 +101,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // TESTING BINGDINGS A
-    //testController.a().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(0))));
-    //testController.b().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(-90))));
+    testController.a().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(180.0))));
+    testController.b().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(90.0))));
     //testController.x().onTrue(new InstantCommand(() -> armSubsystem.setArmAngle(Units.degreesToRadians(-180))));
 
     // BINGDING CONFIG A

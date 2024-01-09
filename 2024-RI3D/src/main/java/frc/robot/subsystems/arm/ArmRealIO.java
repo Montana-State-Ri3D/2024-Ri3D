@@ -2,6 +2,7 @@ package frc.robot.subsystems.arm;
 
 import static frc.robot.Constants.*;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -28,36 +29,41 @@ public class ArmRealIO implements ArmIO {
             armMotor_r.setIdleMode(CANSparkMax.IdleMode.kBrake);
             isBrake = true;
 
+            armMotor_r.setInverted(true);
+
             armPIDController = armMotor_r.getPIDController();
 
             armAbsoluteEncoder = armMotor_r.getAbsoluteEncoder(Type.kDutyCycle);
 
-            armMotor_l.follow(armMotor_r);
+            armMotor_l.follow(armMotor_r, true);
 
             armAbsoluteEncoder.setZeroOffset(ARM_Offset);
 
+            armAbsoluteEncoder.setInverted(true);
             armAbsoluteEncoder.setPositionConversionFactor(Math.PI*2);
             armAbsoluteEncoder.setVelocityConversionFactor(Math.PI*2/60);
             
-            armPIDController.setP(0.2);
+            armPIDController.setP(0.001);
             armPIDController.setI(0);
             armPIDController.setD(0);
 
             armPIDController.setFeedbackDevice(armAbsoluteEncoder);
             armPIDController.setOutputRange(-0.25, 0.25);   
             
-            armMotor_r.setSmartCurrentLimit(10);
-            armMotor_l.setSmartCurrentLimit(10);
+            armMotor_r.setSmartCurrentLimit(5);
+            armMotor_l.setSmartCurrentLimit(5);
         }
 
 
         public void updateInputs(ArmIOInputs inputs) {
             inputs.isBrake = isBrake;
-            inputs.curent = armMotor_l.getOutputCurrent();
+            inputs.curent = armMotor_r.getOutputCurrent();
             inputs.curentAngle = armAbsoluteEncoder.getPosition();
             inputs.velocity = armAbsoluteEncoder.getVelocity();
             inputs.targetAngle = targetAngle;
-            inputs.appliedPower = armMotor_l.getAppliedOutput();
+            inputs.appliedPower = armMotor_r.getAppliedOutput();
+            inputs.relativePos_l = armMotor_l.getEncoder().getPosition();
+            inputs.relativePos_r = armMotor_r.getEncoder().getPosition();
         }
 
         public void setBreakMode(boolean isBrake) {

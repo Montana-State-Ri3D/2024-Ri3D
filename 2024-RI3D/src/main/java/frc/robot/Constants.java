@@ -42,7 +42,7 @@ public final class Constants {
     public static final int SHOOTER_LEFT = 10;
     public static final int SHOOTER_RIGHT = 11;
 
-    public static final double ARM_Offset = Units.degreesToRadians(42.2);
+    public static final double ARM_Offset = Units.degreesToRadians(319.0 - 180.0);
 
     // Radios
     public static final double INTAKE_RADIO = (1.0/3.2727);
