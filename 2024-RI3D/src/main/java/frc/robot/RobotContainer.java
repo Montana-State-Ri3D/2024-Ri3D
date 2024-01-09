@@ -44,6 +44,7 @@ public class RobotContainer {
   private SequentialCommandGroup shootRing;
   private SequentialCommandGroup intakeRing;
   private SequentialCommandGroup climber;
+  private SequentialCommandGroup feederIntakeRing;
 
   private RobotIdentity identity;
 
@@ -87,6 +88,12 @@ public class RobotContainer {
     intakeRing.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     intakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
 
+    feederIntakeRing = new SequentialCommandGroup();
+
+    feederIntakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("AMP")));
+    feederIntakeRing.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
+    feederIntakeRing.addCommands(new InstantCommand(() ->armSubsystem.setPosition("SHOOT")));
+
     climber = new SequentialCommandGroup();
 
     //climber.addCommands(new InstantCommand(() ->armSubsystem.setPosition("LATCHSTANDBY")));
@@ -110,8 +117,8 @@ public class RobotContainer {
     driveController.rightBumper().onTrue(shootRing);
     driveController.a().onTrue(intakeRing);
     driveController.leftBumper().onTrue(climber);
+    driveController.x().onTrue(feederIntakeRing);
   }
-
 
   public Command getAutonomousCommand() {
     return null;
