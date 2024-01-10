@@ -6,6 +6,7 @@ import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.DriveTrainRealIO;
 import frc.robot.subsystems.drivetrain.DriveTrainSimIO;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeRealIO;
 import frc.robot.subsystems.intake.IntakeSimIO;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterRealIO;
@@ -24,9 +25,7 @@ public final class SubsystemFactory {
             case SIMULATION:
                 return new DriveTrain(new DriveTrainSimIO());
             default:
-                // return new DriveTrain(new DriveTrainRealIO(LEFT_FRONT_MOTOR, LEFT_BACK_MOTOR,
-                // RIGHT_FRONT_MOTOR,RIGHT_BACK_MOTOR));
-                return new DriveTrain(new DriveTrainSimIO());
+                return new DriveTrain(new DriveTrainRealIO(LEFT_FRONT_MOTOR, LEFT_BACK_MOTOR,RIGHT_FRONT_MOTOR, RIGHT_BACK_MOTOR));
         }
     }
 
@@ -35,7 +34,7 @@ public final class SubsystemFactory {
             case SIMULATION:
                 return new Intake(new IntakeSimIO());
             default:
-                return new Intake(new IntakeSimIO());
+                return new Intake(new IntakeRealIO(INTAKE_MOTOR, INTAKE_BEAM_BREAK));
 
         }
     }
@@ -45,7 +44,6 @@ public final class SubsystemFactory {
             case SIMULATION:
                 return new Shooter(new ShooterSimIO());
             default:
-                // return new Shooter(new ShooterSimIO());
                 return new Shooter(new ShooterRealIO(SHOOTER_LEFT, SHOOTER_RIGHT));
 
         }
@@ -57,7 +55,6 @@ public final class SubsystemFactory {
                 return new Climber(new ClimberSimIO());
             default:
                 return new Climber(new ClimberRealIO(CLIMBER_WENCH_MOTOR));
-                //return new Climber(new ClimberRealIO(CLIMBER_MOTOR, CLIMBER_WENCH_MOTOR));
 
         }
     }
@@ -67,7 +64,6 @@ public final class SubsystemFactory {
             case SIMULATION:
                 return new Arm(new ArmSimIO());
             default:
-                // return new Arm(new ArmSimIO());
                 return new Arm(new ArmRealIO(ARM_MOTOR_LEFT, ARM_MOTOR_RIGHT));
         }
     }

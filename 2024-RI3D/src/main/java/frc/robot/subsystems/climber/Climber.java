@@ -20,7 +20,14 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
 
-    logger.processInputs("Climber/Inputs", inputs);
+    logger.processInputs("Climber", inputs);
+
+    if (this.getCurrentCommand() != null) {
+
+      logger.recordOutput("Climber/CurentCommand", this.getCurrentCommand().getName());
+    } else {
+      logger.recordOutput("Climber/CurentCommand", "none");
+    }
   }
 
   public void setWinchPower(double power) {

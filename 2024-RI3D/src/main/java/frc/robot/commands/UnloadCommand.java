@@ -10,6 +10,8 @@ public class UnloadCommand extends CommandBase {
     Intake intake;
     Arm feeder;
 
+    private long initTime = -1;
+    private final long placeDuration = 500;
 
     private final BooleanSupplier cancel;
 
@@ -23,7 +25,8 @@ public class UnloadCommand extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        intake.setPower(-6);
+        initTime = System.currentTimeMillis();
+        intake.setPower(1);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -40,6 +43,10 @@ public class UnloadCommand extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return (!intake.getBeamBreakValue() | cancel.getAsBoolean());
+        long currentTime = System.currentTimeMillis();
+        if (currentTime >= initTime + placeDuration |cancel.getAsBoolean())
+          return true;
+        else;
+          return false;
+      }
     }
-}

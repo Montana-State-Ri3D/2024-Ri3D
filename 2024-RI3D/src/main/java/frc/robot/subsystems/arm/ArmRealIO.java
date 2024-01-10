@@ -3,7 +3,6 @@ package frc.robot.subsystems.arm;
 import static frc.robot.Constants.*;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
@@ -18,47 +17,52 @@ public class ArmRealIO implements ArmIO {
 
         private CANSparkMax armMotor_l;
         private CANSparkMax armMotor_r;
-        private SparkMaxPIDController armPIDController_l;
-        private SparkMaxPIDController armPIDController_r;
-        private SparkMaxAbsoluteEncoder armAbsoluteEncoder_l;
-        private SparkMaxAbsoluteEncoder armAbsoluteEncoder_r;
+        private SparkMaxPIDController armPIDController;
+        private SparkMaxAbsoluteEncoder armAbsoluteEncoder;
 
         public ArmRealIO(int IDleftMotor, int IDrightMotor) {
             armMotor_l = new CANSparkMax(IDleftMotor, MotorType.kBrushless);
             armMotor_r = new CANSparkMax(IDrightMotor, MotorType.kBrushless);
 
-            armPIDController_l = armMotor_l.getPIDController();
-            armPIDController_r = armMotor_r.getPIDController();
-
-            armAbsoluteEncoder_l = armMotor_l.getAbsoluteEncoder(Type.kDutyCycle);
-            armAbsoluteEncoder_r = armMotor_r.getAbsoluteEncoder(Type.kDutyCycle);
-
-            armMotor_r.follow(armMotor_l);
-
-            armAbsoluteEncoder_l.setZeroOffset(ARM_Offset);
-
-            armAbsoluteEncoder_l.setPositionConversionFactor(Math.PI*2);
-            armAbsoluteEncoder_l.setVelocityConversionFactor(Math.PI*2/60);
-            
-            armPIDController_l.setP(0.2);
-            armPIDController_l.setI(0);
-            armPIDController_l.setD(0);
-
-            armPIDController_l.setFeedbackDevice(armAbsoluteEncoder_l);
-            armPIDController_l.setOutputRange(-1, 1);
-
             armMotor_l.setIdleMode(CANSparkMax.IdleMode.kBrake);
+            armMotor_r.setIdleMode(CANSparkMax.IdleMode.kBrake);
             isBrake = true;
+
+            armMotor_r.setInverted(true);
+
+            armPIDController = armMotor_r.getPIDController();
+
+            armAbsoluteEncoder = armMotor_r.getAbsoluteEncoder(Type.kDutyCycle);
+
+            armMotor_l.follow(armMotor_r, true);
+
+            armAbsoluteEncoder.setZeroOffset(ARM_Offset);
+
+            armAbsoluteEncoder.setInverted(true);
+            armAbsoluteEncoder.setPositionConversionFactor(Math.PI*2);
+            armAbsoluteEncoder.setVelocityConversionFactor(Math.PI*2/60);
+            
+            armPIDController.setP(0.4);
+            armPIDController.setI(0.0);
+            armPIDController.setD(0.00001);
+
+            armPIDController.setFeedbackDevice(armAbsoluteEncoder);
+            armPIDController.setOutputRange(-1.00, 1.00);   
+            
+            armMotor_r.setSmartCurrentLimit(80);
+            armMotor_l.setSmartCurrentLimit(80);
         }
 
 
         public void updateInputs(ArmIOInputs inputs) {
             inputs.isBrake = isBrake;
-            inputs.curent = armMotor_l.getOutputCurrent();
-            inputs.curentAngle = armAbsoluteEncoder_l.getPosition();
-            inputs.velocity = armAbsoluteEncoder_l.getVelocity();
+            inputs.curent = armMotor_r.getOutputCurrent()+ armMotor_l.getOutputCurrent();
+            inputs.curentAngle = armAbsoluteEncoder.getPosition();
+            inputs.velocity = armAbsoluteEncoder.getVelocity();
             inputs.targetAngle = targetAngle;
-            inputs.appliedPower = armMotor_l.getAppliedOutput();
+            inputs.appliedPower = armMotor_r.getAppliedOutput();
+            inputs.relativePos_l = armMotor_l.getEncoder().getPosition();
+            inputs.relativePos_r = armMotor_r.getEncoder().getPosition();
         }
 
         public void setBreakMode(boolean isBrake) {
@@ -72,7 +76,7 @@ public class ArmRealIO implements ArmIO {
 
         public void setAngle(double angle) {
             targetAngle = angle;
-            armPIDController_l.setReference(angle, ControlType.kPosition);
+            armPIDController.setReference(angle, ControlType.kPosition);
         }
 
 }

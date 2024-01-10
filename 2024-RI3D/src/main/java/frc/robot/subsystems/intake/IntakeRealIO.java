@@ -8,14 +8,12 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import frc.robot.subsystems.intake.IntakeIO.IntakeIOInputs;
 
-public class IntakeRealIO {
+public class IntakeRealIO implements IntakeIO {
     private CANSparkMax intakeMotor;
     private DigitalInput beamBreak;
 
     private boolean isBrake;
-    private boolean intakeUp;
 
     private RelativeEncoder intakeMotorEncoder;
 
@@ -23,44 +21,38 @@ public class IntakeRealIO {
         intakeMotor = new CANSparkMax(IDintakeMotor, MotorType.kBrushless);
         beamBreak = new DigitalInput(IDBeamBreak);
 
-        intakeMotor.restoreFactoryDefaults();
-
         intakeMotorEncoder = intakeMotor.getEncoder();
-        //Config
-        intakeMotor.setSmartCurrentLimit(45);
+
+        intakeMotor.setSmartCurrentLimit(100);
 
         intakeMotor.setIdleMode(IdleMode.kCoast);
 
         intakeMotor.setInverted(true);
 
-        intakeMotorEncoder.setPositionConversionFactor(INTAKE_MOTOR*Math.PI*2);
-        intakeMotorEncoder.setVelocityConversionFactor(INTAKE_MOTOR*Math.PI*2/60);
+        intakeMotorEncoder.setPositionConversionFactor(INTAKE_RADIO * Math.PI * 2);
+        intakeMotorEncoder.setVelocityConversionFactor(INTAKE_RADIO * Math.PI * 2 / 60);
 
         isBrake = false;
-        intakeUp = true;
     }
 
-    public void updateInputs(IntakeIOInputs inputs){
+    public void updateInputs(IntakeIOInputs inputs) {
         inputs.isBrake = isBrake;
-        inputs.intakeUp = intakeUp;
-
         inputs.curent = intakeMotor.getOutputCurrent();
         inputs.velocity = intakeMotorEncoder.getVelocity();
         inputs.beamBreak = !beamBreak.get();
+        inputs.position = intakeMotorEncoder.getPosition();
     }
 
-    public void setPower(double power){
-        intakeMotor.set(power*12);
+    public void setPower(double power) {
+        intakeMotor.set(power);
     }
 
-    public void toggleMode() {
-        isBrake = !isBrake;
-    }
-
-    public void raiseIntake() {
-        intakeUp = true;
-    }
-    public void lowerIntake(){
-        intakeUp = false;
+    public void setBrake(boolean brake) {
+        if (brake) {
+            intakeMotor.setIdleMode(IdleMode.kBrake);
+        } else {
+            intakeMotor.setIdleMode(IdleMode.kCoast);
+        }
+        isBrake = brake;
     }
 }

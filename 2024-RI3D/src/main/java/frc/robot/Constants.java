@@ -27,10 +27,10 @@ public final class Constants {
     public static final int INTAKE_BEAM_BREAK = 0;
 
     // Drive Motors
-    public static final int LEFT_FRONT_MOTOR = 1;
-    public static final int LEFT_BACK_MOTOR = 2;
-    public static final int RIGHT_FRONT_MOTOR = 3;
-    public static final int RIGHT_BACK_MOTOR = 4;
+    public static final int LEFT_FRONT_MOTOR = 4;
+    public static final int LEFT_BACK_MOTOR = 1;
+    public static final int RIGHT_FRONT_MOTOR = 2;
+    public static final int RIGHT_BACK_MOTOR = 3;
 
     public static final int CLIMBER_WENCH_MOTOR = 6;
 
@@ -42,13 +42,12 @@ public final class Constants {
     public static final int SHOOTER_LEFT = 10;
     public static final int SHOOTER_RIGHT = 11;
 
-    public static final double ARM_Offset = Units.degreesToRadians(75);
+    public static final double ARM_Offset = Units.degreesToRadians(319.0 - 180.0);
 
     // Radios
-    public static final double INTAKE_RADIO = (1.0/4.0);
-    public static final double SHOOTER_RADIO = (1.0/4.0);
-    public static final double CLIMB_RADIO = (1.0/4.0);
-    public static final double WENCH_RADIO = (1.0/50.0);
-    public static final double ARM_RADIO = (1.0/15.0);
+    public static final double INTAKE_RADIO = (1.0/3.2727);
+    public static final double SHOOTER_RADIO = (1.0/1.0);
+    public static final double WENCH_RADIO = (1.0/48.0);
+    public static final double ARM_RADIO = (1.0/1.0);
     public static final double DRIVE_RADIO = (1.0/8.0);
 }

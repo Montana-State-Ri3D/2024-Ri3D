@@ -6,7 +6,6 @@ package frc.robot.subsystems.intake;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
@@ -18,16 +17,24 @@ public class Intake extends SubsystemBase {
 
   public Intake(IntakeIO io) {
     this.io = io;
+
   }
 
   @Override
   public void periodic() {
     io.updateInputs(inputs);
 
-    logger.processInputs("Intake/Inputs", inputs);
+    logger.processInputs("Intake", inputs);
+
+    if (this.getCurrentCommand() != null) {
+
+      logger.recordOutput("Intake/CurentCommand", this.getCurrentCommand().getName());
+    } else {
+      logger.recordOutput("Intake/CurentCommand", "none");
+    }
   }
 
-  public void setPower(double power){
+  public void setPower(double power) {
     io.setPower(power);
   }
 

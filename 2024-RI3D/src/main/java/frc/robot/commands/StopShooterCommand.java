@@ -10,6 +10,8 @@ public class StopShooterCommand extends CommandBase {
 
   public StopShooterCommand(Shooter shooter) {
     addRequirements(shooter);
+    System.out.print("Constructed Stop Shooter");
+    shooter.setPowers(0, 0);
 
     this.shooter = shooter;
   }
@@ -17,12 +19,13 @@ public class StopShooterCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    shooter.setPowers(0, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setPowers(0, 0);
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -33,6 +36,6 @@ public class StopShooterCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

@@ -6,6 +6,7 @@ package frc.robot.subsystems.arm;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
@@ -16,40 +17,61 @@ public class Arm extends SubsystemBase {
 
   private Logger logger = Logger.getInstance();
 
+  private double ARM_MAX_ANGLE = Units.degreesToRadians(277)  ;
+  private double ARM_MIN_ANGLE = Units.degreesToRadians(37);
+
   public Arm(ArmIO io) {
     this.io = io;
   }
-
- 
 
   @Override
   public void periodic() {
     io.updateInputs(inputs);
 
-    logger.processInputs("Arm/Inputs", inputs);
+    logger.processInputs("Arm", inputs);
+
+    if (this.getCurrentCommand() != null) {
+
+      logger.recordOutput("Arm/CurentCommand", this.getCurrentCommand().getName());
+    } else {
+      logger.recordOutput("Arm/CurentCommand", "none");
+    }
   }
+
   public void setArmAngle(double angle) {
-    io.setAngle(angle);
+    if (angle > ARM_MAX_ANGLE) {
+      System.out.println("Arm angle is too big");
+    } else if (angle < ARM_MIN_ANGLE) {
+      System.out.println("Arm angle is too small");
+    }
+    else {
+      io.setAngle(angle);
+    }
 
   }
 
-  public void setPosition (String position) {
+  public void setPosition(String position) {
+
+    logger.recordOutput("Arm/Position", position);
+
     if (position.equals("INTAKE")) {
-      io.setAngle(0);
-    }
-    else if (position.equals("AMP")) {
-      io.setAngle(90);
-    }
-    else if (position.equals("SHOOT")) {
-      io.setAngle(160);
-    }
-    else if (position.equals("LATCHSTANDBY")) {
-      io.setAngle(90);
-    }
-    else if (position.equals("LATCH")) {
-      io.setAngle(120);
+      setArmAngle(Units.degreesToRadians(38));
+    } else if (position.equals("AMP")) {
+      setArmAngle(Units.degreesToRadians(171));
+    } else if (position.equals("SHOOT")) {
+      setArmAngle(Units.degreesToRadians(274));
+    } else if (position.equals("LATCHSTANDBY")) {
+      setArmAngle(Units.degreesToRadians(171));
+    } else if (position.equals("LATCH")) {
+      setArmAngle(Units.degreesToRadians(217));
+    } else if (position.equals("CLIMB")){
+      setArmAngle(Units.degreesToRadians(277));
+    }else if (position.equals("HI_INTAKE")){
+      setArmAngle(Units.degreesToRadians(153));
     }
   }
 
-  
+  public double getAngle() {
+    return inputs.curentAngle;
+  }
 }

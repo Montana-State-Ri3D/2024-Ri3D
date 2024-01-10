@@ -23,7 +23,7 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
 
-    logger.processInputs("Shooter/Inputs", inputs);
+    logger.processInputs("Shooter", inputs);
 
     if (this.getCurrentCommand() != null) {
 

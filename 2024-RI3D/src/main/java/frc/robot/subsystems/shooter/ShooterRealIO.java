@@ -2,8 +2,6 @@ package frc.robot.subsystems.shooter;
 
 import static frc.robot.Constants.*;
 
-import javax.swing.text.AbstractDocument.LeafElement;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -19,9 +17,12 @@ public class ShooterRealIO implements ShooterIO {
     private SparkMaxPIDController leftPIDController;
     private SparkMaxPIDController rightPIDController;
 
-    RelativeEncoder leftMotorEncoder;
-    RelativeEncoder rightMotorEncoder;
+    private RelativeEncoder leftMotorEncoder;
+    private RelativeEncoder rightMotorEncoder;
 
+    private double p = 0;
+    private double i = 0;
+    private double d = 0;
 
     public ShooterRealIO(int IDleftMotor, int IDrightMotor) {
         leftMotor = new CANSparkMax(IDleftMotor, MotorType.kBrushless);
@@ -30,28 +31,27 @@ public class ShooterRealIO implements ShooterIO {
         leftPIDController = leftMotor.getPIDController();
         rightPIDController = rightMotor.getPIDController();
 
-
         leftMotorEncoder = leftMotor.getEncoder();
         rightMotorEncoder = rightMotor.getEncoder();
 
-        leftMotor.setInverted(true);
-        rightMotor.setInverted(false);
+        leftMotor.setInverted(false);
+        rightMotor.setInverted(true);
 
-        leftMotor.setSmartCurrentLimit(40);
-        rightMotor.setSmartCurrentLimit(40);
-
-        leftMotor.setVoltage(0);
-        rightMotor.setVoltage(0);
+        leftMotor.setSmartCurrentLimit(80);
+        rightMotor.setSmartCurrentLimit(80);
 
         leftMotorEncoder.setVelocityConversionFactor(SHOOTER_RADIO*2*Math.PI/60);
         rightMotorEncoder.setVelocityConversionFactor(SHOOTER_RADIO*2*Math.PI/60);
 
-        leftPIDController.setP(0.2);
-        leftPIDController.setI(0);
-        leftPIDController.setD(0);
-        rightPIDController.setP(0.2);
-        rightPIDController.setI(0);
-        rightPIDController.setD(0);
+        leftMotorEncoder.setPositionConversionFactor(SHOOTER_RADIO*2*Math.PI);
+        rightMotorEncoder.setPositionConversionFactor(SHOOTER_RADIO*2*Math.PI);
+
+        leftPIDController.setP(p);
+        leftPIDController.setI(i);
+        leftPIDController.setD(d);
+        rightPIDController.setP(p);
+        rightPIDController.setI(i);
+        rightPIDController.setD(d);
 
         leftPIDController.setFeedbackDevice(leftMotorEncoder);
         rightPIDController.setFeedbackDevice(rightMotorEncoder);
@@ -65,11 +65,13 @@ public class ShooterRealIO implements ShooterIO {
         inputs.rightCurent = rightMotor.getOutputCurrent();
         inputs.leftVelocity = leftMotorEncoder.getVelocity();
         inputs.rightVelocity = rightMotorEncoder.getVelocity();
+        inputs.leftPosition = leftMotorEncoder.getPosition();
+        inputs.rightPosition = rightMotorEncoder.getPosition();
     }
 
     public void setPowers(double leftPower, double rightPower) {
-        leftMotor.setVoltage(leftPower);
-        rightMotor.setVoltage(rightPower);
+        leftMotor.set(leftPower);
+        rightMotor.set(rightPower);
     }
 
     public void setRPS(double leftRPS, double rightRPS) {

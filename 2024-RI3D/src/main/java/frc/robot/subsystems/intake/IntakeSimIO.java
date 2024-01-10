@@ -10,7 +10,6 @@ public class IntakeSimIO implements IntakeIO{
     private final double moment = 0.05;
 
     private boolean isBrake;
-    private boolean intakeUp;
     private final DCMotor motor;
     private final DCMotorSim motorSim;
 
@@ -20,11 +19,9 @@ public class IntakeSimIO implements IntakeIO{
         motorSim = new DCMotorSim(motor,INTAKE_RADIO,moment);
 
         isBrake = false;
-        intakeUp = true;
     }
     public void updateInputs(IntakeIOInputs inputs){
         inputs.isBrake = isBrake;
-        inputs.intakeUp = intakeUp;
 
         inputs.curent = motorSim.getCurrentDrawAmps();
         inputs.velocity = motorSim.getAngularVelocityRadPerSec();
@@ -32,16 +29,8 @@ public class IntakeSimIO implements IntakeIO{
     public void setPower(double power){
         motorSim.setInputVoltage(power*12);
     }
-
-    public void toggleMode() {
-        isBrake = !isBrake;
-    }
-
-    public void raiseIntake() {
-        intakeUp = true;
-    }
-    public void lowerIntake(){
-        intakeUp = false;
+    public void setBrake(boolean brake){
+        isBrake = brake;
     }
 
 

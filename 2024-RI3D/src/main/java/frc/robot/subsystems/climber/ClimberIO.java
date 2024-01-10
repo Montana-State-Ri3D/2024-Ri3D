@@ -18,6 +18,6 @@ public interface ClimberIO {
 
     default void updateInputs(ClimberIOInputs inputs){}
     default void setWenchPower(double power){}
-    default void resetClimberEncoder(){}
+    default void setBreak(boolean brake){}
 
 }
