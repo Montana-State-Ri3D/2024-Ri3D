@@ -1,9 +1,9 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.shooter.Shooter;
-public class FeederCommand extends CommandBase {
+public class FeederCommand extends Command {
     Shooter shooter;
 
     public FeederCommand() {

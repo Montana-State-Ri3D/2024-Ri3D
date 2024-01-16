@@ -1,10 +1,10 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.intake.Intake;
 
-public class StopShooterCommand extends CommandBase {
+public class StopShooterCommand extends Command {
   Shooter shooter;
   Intake intake;
 

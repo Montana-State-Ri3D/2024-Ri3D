@@ -2,13 +2,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import java.util.function.DoubleSupplier;
 
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.utility.Joystick;
 
-public class DriveCommand extends CommandBase {
+public class DriveCommand extends Command {
   /** Creates a new DriveCommand. */
   private final DriveTrain subsystem;
   private final DoubleSupplier xSpeed;

@@ -4,13 +4,13 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.utility.Joystick;
 
 
-public class ClimberCommand extends CommandBase {
+public class ClimberCommand extends Command {
   /** Creates a new DriveCommand. */
   private final Climber climberSubsystem;
   private final Arm armSubsystem;
