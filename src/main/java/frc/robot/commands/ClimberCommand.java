@@ -19,11 +19,11 @@ public class ClimberCommand extends Command {
   private final BooleanSupplier cancel;
   private double wenchPower;
 
-  public ClimberCommand(Climber climberSubsystem, DoubleSupplier wenchSpeed, Arm armSubsystem, BooleanSupplier cancle) {
+  public ClimberCommand(Climber climberSubsystem, DoubleSupplier wenchSpeed, Arm armSubsystem, BooleanSupplier cancel) {
     this.climberSubsystem = climberSubsystem;
     this.wenchSpeed = wenchSpeed;
     this.armSubsystem = armSubsystem;
-    this.cancel = cancle;
+    this.cancel = cancel;
     addRequirements(climberSubsystem);
   }
 

@@ -7,6 +7,7 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.commands.UnloadCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.StopShooterCommand;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.intake.Intake;
@@ -18,6 +19,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.XboxController;
 
 import static frc.robot.Constants.*;
 
@@ -30,6 +34,8 @@ public class RobotContainer {
   private final CommandXboxController operatorController = new CommandXboxController(OPERATOR_CONTROLLER_PORT);
   @SuppressWarnings({ "unused" })
   private final CommandXboxController testController = new CommandXboxController(TEST_CONTROLLER_PORT);
+
+  private final XboxController HID = new XboxController(0);
 
   private DriveTrain driveTrainSubsystem;
   private Intake intakeSubsystem;
@@ -44,6 +50,7 @@ public class RobotContainer {
   private SequentialCommandGroup hiIntake;
   private SequentialCommandGroup climber;
   private SequentialCommandGroup feederPlace;
+  private SequentialCommandGroup autoShootDrive;
 
   private RobotIdentity identity;
 
@@ -77,18 +84,30 @@ public class RobotContainer {
     shootRing.addCommands(new WaitCommand(2));
     shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
+    //Rumble
+    shootRing.addCommands(new RumbleCommand(1));
+    shootRing.addCommands(new WaitCommand(1));
+    shootRing.addCommands(new RumbleCommand(0));
 
     intakeRing = new SequentialCommandGroup();
 
     intakeRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("INTAKE")));
     intakeRing.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     intakeRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
+    // Rumble
+    intakeRing.addCommands(new RumbleCommand(1));
+    intakeRing.addCommands(new WaitCommand(1));
+    intakeRing.addCommands(new RumbleCommand(0));
 
     hiIntake = new SequentialCommandGroup();
 
     hiIntake.addCommands(new InstantCommand(() -> armSubsystem.setPosition("HI_INTAKE")));
     hiIntake.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     hiIntake.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
+    // Rumble
+    hiIntake.addCommands(new RumbleCommand(1));
+    hiIntake.addCommands(new WaitCommand(1));
+    hiIntake.addCommands(new RumbleCommand(0));
 
     feederPlace = new SequentialCommandGroup();
 
@@ -102,6 +121,13 @@ public class RobotContainer {
     climber.addCommands(new InstantCommand(() -> armSubsystem.setPosition("CLIMB")));
     climber.addCommands(new ClimberCommand(climberSubsystem, () -> driveController.getRightY(), armSubsystem,
         () -> driveController.b().getAsBoolean()));
+    
+    autoShootDrive = new SequentialCommandGroup();
+
+    autoShootDrive.addCommands(shootRing);
+    autoShootDrive.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.5, 0.5)));
+    autoShootDrive.addCommands(new WaitCommand(1));
+    autoShootDrive.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.0, 0.0)));
 
   }
 
