@@ -36,11 +36,11 @@ public class ArmRealIO implements ArmIO {
 
             armMotor_l.follow(armMotor_r, true);
 
-            armAbsoluteEncoder.setZeroOffset(ARM_Offset);
-
             armAbsoluteEncoder.setInverted(true);
             armAbsoluteEncoder.setPositionConversionFactor(Math.PI*2);
             armAbsoluteEncoder.setVelocityConversionFactor(Math.PI*2/60);
+
+            armAbsoluteEncoder.setZeroOffset(ARM_Offset);
             
             armPIDController.setP(0.4);
             armPIDController.setI(0.0);
