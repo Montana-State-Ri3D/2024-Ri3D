@@ -14,7 +14,7 @@ public class RumbleCommand extends Command {
   public RumbleCommand(int Power) {
     this.Power = Power;
 
-    HID.setRumble(RumbleType.kLeftRumble, 1.0);
+    HID.setRumble(RumbleType.kLeftRumble, Power);
 
   }
 
