@@ -8,24 +8,18 @@ public class ShootCommand extends Command {
   Shooter shooter;
   Intake intake;
 
-  private double Lpower;
-  private double Rpower;
 
   public ShootCommand(Shooter shooter, double Lpower,double Rpower) {
     addRequirements(shooter);
-    System.out.println("Creating Shoot");
-
-    this.Lpower = Lpower;
-    this.Rpower = Rpower;
 
     this.shooter = shooter;
+
+    shooter.setPowers(Lpower, Rpower);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setPowers(Lpower, Rpower);
-    System.out.println("Spining up");
   }
 
   // Called every time the scheduler runs while the command is scheduled.

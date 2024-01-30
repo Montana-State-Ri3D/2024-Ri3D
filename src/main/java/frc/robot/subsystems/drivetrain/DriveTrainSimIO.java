@@ -18,6 +18,9 @@ public class DriveTrainSimIO implements DriveTrainIO  {
     private final DCMotor lefMotors;
     private final DCMotor rightMotors;
 
+    private double leftPower;
+    private double rightPower;
+
     private final DCMotorSim lMotorSim;
     private final DCMotorSim rMotorSim;
 
@@ -34,10 +37,13 @@ public class DriveTrainSimIO implements DriveTrainIO  {
         inputs.isBrake = isBrake;
         inputs.leftCurent = lMotorSim.getCurrentDrawAmps();
         inputs.rightCurent = rMotorSim.getCurrentDrawAmps();
-        inputs.leftPos = lMotorSim.getAngularPositionRad();
-        inputs.rightPos = rMotorSim.getAngularPositionRad();
+        inputs.leftAppliedPower = leftPower;
+        inputs.rightAppliedPower = rightPower;
     }
     public void drive(double leftPower, double rightPower){
+        this.leftPower = leftPower;
+        this.rightPower = rightPower;
+
         lMotorSim.setInput(leftPower);
         rMotorSim.setInput(rightPower);
     }

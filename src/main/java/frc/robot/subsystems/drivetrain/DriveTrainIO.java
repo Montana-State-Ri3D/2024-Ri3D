@@ -13,9 +13,8 @@ public interface DriveTrainIO {
         public boolean isBrake;
         public double leftCurent;
         public double rightCurent;
-        public double leftPos;
-        public double rightPos;
-        public double distTraveled;
+        public double leftAppliedPower;
+        public double rightAppliedPower;
     }
     default void updateInputs(DriveTrainIOInputs inputs){}
     default void drive(double leftPower, double rightPower) {}

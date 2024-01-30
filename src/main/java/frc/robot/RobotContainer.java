@@ -7,7 +7,6 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.commands.UnloadCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.StopShooterCommand;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.intake.Intake;
@@ -32,19 +31,20 @@ public class RobotContainer {
   @SuppressWarnings({ "unused" })
   private final CommandXboxController testController = new CommandXboxController(TEST_CONTROLLER_PORT);
 
-  private DriveTrain driveTrainSubsystem;
+  public DriveTrain driveTrainSubsystem;
   private Intake intakeSubsystem;
   private Shooter shooterSubsystem;
   private Arm armSubsystem;
   private Climber climberSubsystem;
 
-  private DriveCommand defaultDriveCommand;
+  public DriveCommand defaultDriveCommand;
 
   private SequentialCommandGroup shootRing;
   private SequentialCommandGroup intakeRing;
   private SequentialCommandGroup hiIntake;
   private SequentialCommandGroup climber;
   private SequentialCommandGroup feederPlace;
+  private SequentialCommandGroup shootRingAuto;
   private SequentialCommandGroup autoShootDrive;
 
   private RobotIdentity identity;
@@ -79,30 +79,27 @@ public class RobotContainer {
     shootRing.addCommands(new WaitCommand(2));
     shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
-    //Rumble
-    shootRing.addCommands(new RumbleCommand(1));
-    shootRing.addCommands(new WaitCommand(1));
-    shootRing.addCommands(new RumbleCommand(0));
+
+    shootRingAuto = new SequentialCommandGroup();
+
+    shootRingAuto.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
+    // TODO Check if the arm is in the right position
+    shootRingAuto.addCommands(new ShootCommand(shooterSubsystem, 0.8, 0.8));
+    shootRingAuto.addCommands(new WaitCommand(2));
+    shootRingAuto.addCommands(new UnloadCommand(intakeSubsystem, () -> false));
+    shootRingAuto.addCommands(new StopShooterCommand(shooterSubsystem));
 
     intakeRing = new SequentialCommandGroup();
 
     intakeRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("INTAKE")));
     intakeRing.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     intakeRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
-    // Rumble
-    intakeRing.addCommands(new RumbleCommand(1));
-    intakeRing.addCommands(new WaitCommand(1));
-    intakeRing.addCommands(new RumbleCommand(0));
 
     hiIntake = new SequentialCommandGroup();
 
     hiIntake.addCommands(new InstantCommand(() -> armSubsystem.setPosition("HI_INTAKE")));
     hiIntake.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     hiIntake.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
-    // Rumble
-    hiIntake.addCommands(new RumbleCommand(1));
-    hiIntake.addCommands(new WaitCommand(1));
-    hiIntake.addCommands(new RumbleCommand(0));
 
     feederPlace = new SequentialCommandGroup();
 
@@ -119,10 +116,10 @@ public class RobotContainer {
     
     autoShootDrive = new SequentialCommandGroup();
 
-    autoShootDrive.addCommands(shootRing);
-    autoShootDrive.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.5, 0.5)));
-    autoShootDrive.addCommands(new WaitCommand(1));
-    autoShootDrive.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.0, 0.0)));
+    autoShootDrive.addCommands(shootRingAuto);
+    autoShootDrive.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.5, 0.5), driveTrainSubsystem));
+    autoShootDrive.addCommands(new WaitCommand(3));
+    autoShootDrive.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.0, 0.0), driveTrainSubsystem));
 
   }
 
@@ -140,6 +137,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return null;
+    return autoShootDrive;
   }
 }

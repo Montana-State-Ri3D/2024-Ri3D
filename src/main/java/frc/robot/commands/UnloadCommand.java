@@ -44,7 +44,7 @@ public class UnloadCommand extends Command {
     @Override
     public boolean isFinished() {
         long currentTime = System.currentTimeMillis();
-        if (currentTime >= initTime + placeDuration |cancel.getAsBoolean())
+        if (currentTime >= initTime + placeDuration | cancel.getAsBoolean())
           return true;
         else;
           return false;
