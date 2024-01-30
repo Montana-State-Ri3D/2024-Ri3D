@@ -8,6 +8,7 @@ import frc.robot.commands.UnloadCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.StopShooterCommand;
+import frc.robot.commands.TurboDriveCommand;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
@@ -38,6 +39,7 @@ public class RobotContainer {
   private Climber climberSubsystem;
 
   public DriveCommand defaultDriveCommand;
+  public TurboDriveCommand turboDriveCommand;
 
   private SequentialCommandGroup shootRing;
   private SequentialCommandGroup intakeRing;
@@ -69,9 +71,15 @@ public class RobotContainer {
     defaultDriveCommand = new DriveCommand(driveTrainSubsystem,
         () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
         () -> -driveController.getLeftX());
+    shootRing = new SequentialCommandGroup();  
+
+    turboDriveCommand = new TurboDriveCommand(driveTrainSubsystem,
+        () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
+        () -> -driveController.getLeftX());
+
     driveTrainSubsystem.setDefaultCommand(defaultDriveCommand);
 
-    shootRing = new SequentialCommandGroup();
+    
 
     shootRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
     // TODO Check if the arm is in the right position
@@ -79,15 +87,6 @@ public class RobotContainer {
     shootRing.addCommands(new WaitCommand(2));
     shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
-
-    shootRingAuto = new SequentialCommandGroup();
-
-    shootRingAuto.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
-    // TODO Check if the arm is in the right position
-    shootRingAuto.addCommands(new ShootCommand(shooterSubsystem, 0.8, 0.8));
-    shootRingAuto.addCommands(new WaitCommand(2));
-    shootRingAuto.addCommands(new UnloadCommand(intakeSubsystem, () -> false));
-    shootRingAuto.addCommands(new StopShooterCommand(shooterSubsystem));
 
     intakeRing = new SequentialCommandGroup();
 
@@ -111,8 +110,16 @@ public class RobotContainer {
     climber = new SequentialCommandGroup();
 
     climber.addCommands(new InstantCommand(() -> armSubsystem.setPosition("CLIMB")));
-    climber.addCommands(new ClimberCommand(climberSubsystem, () -> driveController.getRightY(), armSubsystem,
-        () -> driveController.b().getAsBoolean()));
+    //climber.addCommands(new ClimberCommand(climberSubsystem, () -> driveController.getRightY(), armSubsystem,() -> driveController.b().getAsBoolean()));
+
+    shootRingAuto = new SequentialCommandGroup();
+
+    shootRingAuto.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
+    // TODO Check if the arm is in the right position
+    shootRingAuto.addCommands(new ShootCommand(shooterSubsystem, 0.8, 0.8));
+    shootRingAuto.addCommands(new WaitCommand(2));
+    shootRingAuto.addCommands(new UnloadCommand(intakeSubsystem, () -> false));
+    shootRingAuto.addCommands(new StopShooterCommand(shooterSubsystem));
     
     autoShootDrive = new SequentialCommandGroup();
 
@@ -127,9 +134,11 @@ public class RobotContainer {
 
     driveController.rightBumper().onTrue(shootRing);
     driveController.a().onTrue(intakeRing);
-    driveController.leftBumper().onTrue(climber);
+    operatorController.leftBumper().onTrue(climber);
     driveController.y().onTrue(feederPlace);
     driveController.x().onTrue(hiIntake);
+
+    driveController.leftBumper().whileTrue(turboDriveCommand);
 
     driveController.povLeft().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCH")));
     driveController.povUp().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCHSTANDBY")));

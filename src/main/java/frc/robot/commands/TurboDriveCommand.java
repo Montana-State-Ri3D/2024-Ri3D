@@ -8,14 +8,14 @@ import java.util.function.DoubleSupplier;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.utility.Joystick;
 
-public class DriveCommand extends Command {
+public class TurboDriveCommand extends Command {
   /** Creates a new DriveCommand. */
   private final DriveTrain subsystem;
   private final DoubleSupplier xSpeed;
   private final DoubleSupplier zRotation;
   private WheelSpeeds wheelSpeeds;
 
-  public DriveCommand(DriveTrain subsystem, DoubleSupplier xSpeed, DoubleSupplier zRotation) {
+  public TurboDriveCommand(DriveTrain subsystem, DoubleSupplier xSpeed, DoubleSupplier zRotation) {
     this.subsystem = subsystem;
     this.xSpeed = xSpeed;
     this.zRotation = zRotation;
@@ -32,8 +32,8 @@ public class DriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    wheelSpeeds = DifferentialDrive.arcadeDriveIK(Joystick.JoystickInput(xSpeed.getAsDouble(), 3, 0.005, .4),
-        -Joystick.JoystickInput(zRotation.getAsDouble(), 3, 0.005, .4), false);
+    wheelSpeeds = DifferentialDrive.arcadeDriveIK(Joystick.JoystickInput(xSpeed.getAsDouble(), 3, 0.005, .9),
+        -Joystick.JoystickInput(zRotation.getAsDouble(), 3, 0.005, .9), false);
     subsystem.drive(wheelSpeeds.left, wheelSpeeds.right);
   }
 
