@@ -110,7 +110,7 @@ public class RobotContainer {
     climber = new SequentialCommandGroup();
 
     climber.addCommands(new InstantCommand(() -> armSubsystem.setPosition("CLIMB")));
-    //climber.addCommands(new ClimberCommand(climberSubsystem, () -> driveController.getRightY(), armSubsystem,() -> driveController.b().getAsBoolean()));
+    climber.addCommands(new ClimberCommand(climberSubsystem, () -> driveController.getRightY(), armSubsystem,() -> driveController.b().getAsBoolean()));
 
     shootRingAuto = new SequentialCommandGroup();
 
