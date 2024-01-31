@@ -114,8 +114,7 @@ public class RobotContainer {
     shootRingAuto = new SequentialCommandGroup();
 
     shootRingAuto.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
-    // TODO Check if the arm is in the right position
-    shootRingAuto.addCommands(new InstantCommand(() -> shooterSubsystem.setPowers(0.8, 0.8)));
+    shootRingAuto.addCommands(new InstantCommand(() -> shooterSubsystem.setPowers(0.9, 0.9)));
     shootRingAuto.addCommands(new WaitCommand(2));
     shootRingAuto.addCommands(new UnloadCommand(intakeSubsystem, () -> false));
     shootRingAuto.addCommands(new StopShooterCommand(shooterSubsystem));

@@ -78,7 +78,7 @@ public class ShooterRealIO implements ShooterIO {
     }
 
     public void setRPS(double leftRPS, double rightRPS) {
-        //leftPIDController.setReference(leftRPS, ControlType.kVelocity);
-        //rightPIDController.setReference(rightRPS, ControlType.kVelocity);
+        leftPIDController.setReference(leftRPS, ControlType.kVelocity);
+        rightPIDController.setReference(rightRPS, ControlType.kVelocity);
     }
 }
