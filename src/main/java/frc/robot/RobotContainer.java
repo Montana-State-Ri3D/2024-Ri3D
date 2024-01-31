@@ -5,6 +5,7 @@ import frc.robot.subsystems.climber.Climber;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.UnloadCommand;
+import frc.robot.commands.WaitCommandWithExit;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.StopShooterCommand;
 import frc.robot.commands.TurboDriveCommand;
@@ -83,7 +84,7 @@ public class RobotContainer {
 
     shootRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
     shootRing.addCommands(new InstantCommand(() -> shooterSubsystem.setPowers(0.9, 0.9)));
-    shootRing.addCommands(new WaitCommand(2));
+    shootRing.addCommands(new WaitCommandWithExit(2, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
 
