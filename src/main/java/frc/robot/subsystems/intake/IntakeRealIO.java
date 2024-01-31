@@ -41,6 +41,8 @@ public class IntakeRealIO implements IntakeIO {
         inputs.velocity = intakeMotorEncoder.getVelocity();
         inputs.beamBreak = !beamBreak.get();
         inputs.position = intakeMotorEncoder.getPosition();
+        inputs.appliedOutput = intakeMotor.getAppliedOutput();
+
     }
 
     public void setPower(double power) {

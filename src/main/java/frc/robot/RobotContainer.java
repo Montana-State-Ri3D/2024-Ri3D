@@ -5,7 +5,6 @@ import frc.robot.subsystems.climber.Climber;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.UnloadCommand;
-import frc.robot.commands.ShootCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.StopShooterCommand;
 import frc.robot.commands.TurboDriveCommand;
@@ -48,6 +47,7 @@ public class RobotContainer {
   private SequentialCommandGroup feederPlace;
   private SequentialCommandGroup shootRingAuto;
   private SequentialCommandGroup autoShootDrive;
+  private SequentialCommandGroup autoTurn;
 
   private RobotIdentity identity;
 
@@ -82,8 +82,7 @@ public class RobotContainer {
     
 
     shootRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
-    // TODO Check if the arm is in the right position
-    shootRing.addCommands(new ShootCommand(shooterSubsystem, 0.8, 0.8));
+    shootRing.addCommands(new InstantCommand(() -> shooterSubsystem.setPowers(0.9, 0.9)));
     shootRing.addCommands(new WaitCommand(2));
     shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
@@ -116,7 +115,7 @@ public class RobotContainer {
 
     shootRingAuto.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
     // TODO Check if the arm is in the right position
-    shootRingAuto.addCommands(new ShootCommand(shooterSubsystem, 0.8, 0.8));
+    shootRingAuto.addCommands(new InstantCommand(() -> shooterSubsystem.setPowers(0.8, 0.8)));
     shootRingAuto.addCommands(new WaitCommand(2));
     shootRingAuto.addCommands(new UnloadCommand(intakeSubsystem, () -> false));
     shootRingAuto.addCommands(new StopShooterCommand(shooterSubsystem));
@@ -124,9 +123,16 @@ public class RobotContainer {
     autoShootDrive = new SequentialCommandGroup();
 
     autoShootDrive.addCommands(shootRingAuto);
-    autoShootDrive.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.5, 0.5), driveTrainSubsystem));
-    autoShootDrive.addCommands(new WaitCommand(3));
+    autoShootDrive.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.25, 0.25), driveTrainSubsystem));
+    autoShootDrive.addCommands(new WaitCommand(1));
     autoShootDrive.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.0, 0.0), driveTrainSubsystem));
+
+    autoTurn = new SequentialCommandGroup();
+    autoTurn.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.4, 0.4), driveTrainSubsystem));
+    autoTurn.addCommands(new WaitCommand(0.5));
+    autoTurn.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(-0.4, 0.4), driveTrainSubsystem));
+    autoTurn.addCommands(new WaitCommand(0.6));
+    autoTurn.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.0, 0.0), driveTrainSubsystem));
 
   }
 
@@ -134,6 +140,7 @@ public class RobotContainer {
 
     driveController.rightBumper().onTrue(shootRing);
     driveController.a().onTrue(intakeRing);
+
     operatorController.leftBumper().onTrue(climber);
     driveController.y().onTrue(feederPlace);
     driveController.x().onTrue(hiIntake);
@@ -146,6 +153,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return autoShootDrive;
+    return autoTurn;
   }
 }

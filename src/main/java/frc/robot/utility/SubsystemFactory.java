@@ -24,8 +24,11 @@ public final class SubsystemFactory {
         switch (identity) {
             case SIMULATION:
                 return new DriveTrain(new DriveTrainSimIO());
-            default:
+            case ROBOT_2024:
                 return new DriveTrain(new DriveTrainRealIO(LEFT_FRONT_MOTOR, LEFT_BACK_MOTOR,RIGHT_FRONT_MOTOR, RIGHT_BACK_MOTOR));
+            default:
+                System.out.println("Not Valid Robot Identity");
+                return new DriveTrain(new DriveTrainSimIO());
         }
     }
 
@@ -33,9 +36,12 @@ public final class SubsystemFactory {
         switch (identity) {
             case SIMULATION:
                 return new Intake(new IntakeSimIO());
-            default:
+            case ROBOT_2024:
                 return new Intake(new IntakeRealIO(INTAKE_MOTOR, INTAKE_BEAM_BREAK));
 
+            default:
+                System.out.println("Not Valid Robot Identity");
+                return new Intake(new IntakeSimIO());
         }
     }
 
@@ -43,8 +49,13 @@ public final class SubsystemFactory {
         switch (identity) {
             case SIMULATION:
                 return new Shooter(new ShooterSimIO());
-            default:
+
+            case ROBOT_2024:
                 return new Shooter(new ShooterRealIO(SHOOTER_LEFT, SHOOTER_RIGHT));
+
+            default:
+                System.out.println("Not Valid Robot Identity");
+                return new Shooter(new ShooterSimIO());
 
         }
     }
@@ -53,8 +64,11 @@ public final class SubsystemFactory {
         switch (identity) {
             case SIMULATION:
                 return new Climber(new ClimberSimIO());
-            default:
+            case ROBOT_2024:
                 return new Climber(new ClimberRealIO(CLIMBER_WENCH_MOTOR));
+            default:
+                System.out.println("Not Valid Robot Identity");
+                return new Climber(new ClimberSimIO());
 
         }
     }
@@ -63,8 +77,12 @@ public final class SubsystemFactory {
         switch (identity) {
             case SIMULATION:
                 return new Arm(new ArmSimIO());
-            default:
+
+            case ROBOT_2024:
                 return new Arm(new ArmRealIO(ARM_MOTOR_LEFT, ARM_MOTOR_RIGHT));
+            default:
+                System.out.println("Not Valid Robot Identity");
+                return new Arm(new ArmSimIO());
         }
     }
 }

@@ -68,6 +68,8 @@ public class ShooterRealIO implements ShooterIO {
         inputs.rightVelocity = rightMotorEncoder.getVelocity();
         inputs.leftPosition = leftMotorEncoder.getPosition();
         inputs.rightPosition = rightMotorEncoder.getPosition();
+        inputs.leftAppliedPower = leftMotor.getAppliedOutput();
+        inputs.rightApppliedPower = rightMotor.getAppliedOutput();
     }
 
     public void setPowers(double leftPower, double rightPower) {
@@ -76,7 +78,7 @@ public class ShooterRealIO implements ShooterIO {
     }
 
     public void setRPS(double leftRPS, double rightRPS) {
-        leftPIDController.setReference(leftRPS, ControlType.kVelocity);
-        rightPIDController.setReference(rightRPS, ControlType.kVelocity);
+        //leftPIDController.setReference(leftRPS, ControlType.kVelocity);
+        //rightPIDController.setReference(rightRPS, ControlType.kVelocity);
     }
 }

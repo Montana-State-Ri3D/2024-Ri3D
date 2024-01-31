@@ -55,8 +55,8 @@ public class DriveTrainRealIO implements DriveTrainIO {
         inputs.isBrake = isBrake;
         inputs.leftCurent = leftMotor_1.getStatorCurrent()+ leftMotor_2.getStatorCurrent();
         inputs.rightCurent = rightMotor_2.getStatorCurrent()+ rightMotor_2.getStatorCurrent();
-        inputs.leftAppliedPower = leftMotor_1.getMotorOutputPercent()/100;
-        inputs.rightAppliedPower = rightMotor_1.getMotorOutputPercent()/100;
+        inputs.leftAppliedPower = leftMotor_1.getMotorOutputPercent();
+        inputs.rightAppliedPower = rightMotor_1.getMotorOutputPercent();
     }
 
     public void drive(double leftPower, double rightPower) {
