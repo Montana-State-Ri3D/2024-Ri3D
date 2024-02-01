@@ -12,6 +12,7 @@ import frc.robot.commands.TurboDriveCommand;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.utility.AutoCommandChooser;
 import frc.robot.utility.RobotIdentity;
 import frc.robot.utility.SubsystemFactory;
 import frc.robot.Camera;
@@ -23,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import static frc.robot.Constants.*;
 
+@SuppressWarnings("unused")
 public class RobotContainer {
 
   // Creating Controlers
@@ -39,6 +41,9 @@ public class RobotContainer {
   private Arm armSubsystem;
   private Climber climberSubsystem;
 
+  private AutoCommandChooser autoChooser;
+
+  @SuppressWarnings("unused")
   private Camera camera;
 
   public DriveCommand defaultDriveCommand;
@@ -51,7 +56,7 @@ public class RobotContainer {
   private SequentialCommandGroup feederPlace;
   private SequentialCommandGroup shootRingAuto;
   private SequentialCommandGroup autoShootDrive;
-  private SequentialCommandGroup autoTurn;
+  private SequentialCommandGroup autoAmpBlue;
   
 
   private RobotIdentity identity;
@@ -62,6 +67,7 @@ public class RobotContainer {
     createSubsystems(); // Create our subsystems.
     createCommands(); // Create our commands
     configureButtonBindings(); // Configure the button bindings
+    createAutoCommand();
   }
 
   private void createSubsystems() {
@@ -133,12 +139,12 @@ public class RobotContainer {
     autoShootDrive.addCommands(new WaitCommand(2));
     autoShootDrive.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.0, 0.0), driveTrainSubsystem));
 
-    autoTurn = new SequentialCommandGroup();
-    autoTurn.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.4, 0.4), driveTrainSubsystem));
-    autoTurn.addCommands(new WaitCommand(0.5));
-    autoTurn.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(-0.4, 0.4), driveTrainSubsystem));
-    autoTurn.addCommands(new WaitCommand(0.6));
-    autoTurn.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.0, 0.0), driveTrainSubsystem));
+    autoAmpBlue = new SequentialCommandGroup();
+    autoAmpBlue.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.4, 0.4), driveTrainSubsystem));
+    autoAmpBlue.addCommands(new WaitCommand(0.5));
+    autoAmpBlue.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(-0.4, 0.4), driveTrainSubsystem));
+    autoAmpBlue.addCommands(new WaitCommand(0.6));
+    autoAmpBlue.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.0, 0.0), driveTrainSubsystem));
 
   }
 
@@ -158,7 +164,22 @@ public class RobotContainer {
     driveController.povDown().onTrue(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
   }
 
+  private void createAutoCommand(){
+    autoChooser = new AutoCommandChooser();
+
+    // Register all the supported auto commands
+    autoChooser.registerDefaultCreator("Do Nothing", null);
+
+    autoChooser.registerCreator("Drive Forward", () -> autoShootDrive);
+    autoChooser.registerCreator("Amp Side Left (Blue)", () -> autoAmpBlue);
+    autoChooser.registerCreator("Amp Side Right (Red)", null);
+
+    // Setup the chooser in shuffleboard
+    autoChooser.setup("Driver", 0, 0, 3, 1);
+
+  }
+
   public Command getAutonomousCommand() {
-    return autoTurn;
+    return autoAmpBlue;
   }
 }
