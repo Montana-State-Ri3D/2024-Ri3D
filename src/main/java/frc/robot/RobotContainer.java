@@ -14,6 +14,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.utility.RobotIdentity;
 import frc.robot.utility.SubsystemFactory;
+import frc.robot.Camera;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -38,6 +39,8 @@ public class RobotContainer {
   private Arm armSubsystem;
   private Climber climberSubsystem;
 
+  private Camera camera;
+
   public DriveCommand defaultDriveCommand;
   public TurboDriveCommand turboDriveCommand;
 
@@ -49,6 +52,7 @@ public class RobotContainer {
   private SequentialCommandGroup shootRingAuto;
   private SequentialCommandGroup autoShootDrive;
   private SequentialCommandGroup autoTurn;
+  
 
   private RobotIdentity identity;
 
@@ -66,6 +70,7 @@ public class RobotContainer {
     intakeSubsystem = SubsystemFactory.createIntake(identity);
     shooterSubsystem = SubsystemFactory.createShooter(identity);
     armSubsystem = SubsystemFactory.createArm(identity);
+    camera = SubsystemFactory.createCamera(identity);
   }
 
   private void createCommands() {
@@ -81,11 +86,12 @@ public class RobotContainer {
     driveTrainSubsystem.setDefaultCommand(defaultDriveCommand);
 
     
-
+    shootRing.addCommands(new InstantCommand(() -> driveTrainSubsystem.setLowCurrentMode()));
     shootRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
     shootRing.addCommands(new InstantCommand(() -> shooterSubsystem.setPowers(0.9, 0.9)));
     shootRing.addCommands(new WaitCommandWithExit(2, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
+    shootRing.addCommands(new InstantCommand(() -> driveTrainSubsystem.setHighCurrentMode()));
     shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
 
     intakeRing = new SequentialCommandGroup();
@@ -124,7 +130,7 @@ public class RobotContainer {
 
     autoShootDrive.addCommands(shootRingAuto);
     autoShootDrive.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.25, 0.25), driveTrainSubsystem));
-    autoShootDrive.addCommands(new WaitCommand(1));
+    autoShootDrive.addCommands(new WaitCommand(2));
     autoShootDrive.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.0, 0.0), driveTrainSubsystem));
 
     autoTurn = new SequentialCommandGroup();

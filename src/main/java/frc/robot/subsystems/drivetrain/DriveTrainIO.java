@@ -6,6 +6,8 @@ package frc.robot.subsystems.drivetrain;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
+
 /** Add your docs here. */
 public interface DriveTrainIO {
     @AutoLog
@@ -19,5 +21,6 @@ public interface DriveTrainIO {
     default void updateInputs(DriveTrainIOInputs inputs){}
     default void drive(double leftPower, double rightPower) {}
     default void toggleMode(){}
+    default void setPowerProfile(TalonSRXConfiguration config) {}
 
 }

@@ -2,6 +2,7 @@ package frc.robot.utility;
 
 import static frc.robot.Constants.*;
 
+import frc.robot.Camera;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.DriveTrainRealIO;
 import frc.robot.subsystems.drivetrain.DriveTrainSimIO;
@@ -25,7 +26,8 @@ public final class SubsystemFactory {
             case SIMULATION:
                 return new DriveTrain(new DriveTrainSimIO());
             case ROBOT_2024:
-                return new DriveTrain(new DriveTrainRealIO(LEFT_FRONT_MOTOR, LEFT_BACK_MOTOR,RIGHT_FRONT_MOTOR, RIGHT_BACK_MOTOR));
+                return new DriveTrain(
+                        new DriveTrainRealIO(LEFT_FRONT_MOTOR, LEFT_BACK_MOTOR, RIGHT_FRONT_MOTOR, RIGHT_BACK_MOTOR));
             default:
                 System.out.println("Not Valid Robot Identity");
                 return new DriveTrain(new DriveTrainSimIO());
@@ -83,6 +85,20 @@ public final class SubsystemFactory {
             default:
                 System.out.println("Not Valid Robot Identity");
                 return new Arm(new ArmSimIO());
+        }
+    }
+
+    public static Camera createCamera(RobotIdentity identity) {
+        switch (identity) {
+            case SIMULATION:
+                return new Camera();
+
+            case ROBOT_2024:
+                return new Camera();
+
+            default:
+                System.out.println("Not Valid Robot Identity");
+                return new Camera();
         }
     }
 }

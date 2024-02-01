@@ -89,4 +89,10 @@ public class DriveTrainRealIO implements DriveTrainIO {
             setBrake();
         }
     }
+    public void setPowerProfile(TalonSRXConfiguration config){
+        leftMotor_1.configAllSettings(config);
+        leftMotor_2.configAllSettings(config);
+        rightMotor_1.configAllSettings(config);
+        rightMotor_2.configAllSettings(config);
+    }
 }

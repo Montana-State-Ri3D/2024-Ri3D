@@ -4,14 +4,29 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
+
 public class DriveTrain extends SubsystemBase {
 
   private final DriveTrainIOInputsAutoLogged inputs = new DriveTrainIOInputsAutoLogged();
 
   private DriveTrainIO io;
 
+  private TalonSRXConfiguration highCurrent;
+  private TalonSRXConfiguration lowCurrent;
+
   public DriveTrain(DriveTrainIO io) {
     this.io = io;
+
+    highCurrent = new TalonSRXConfiguration();
+    highCurrent.peakCurrentLimit = 15;
+    highCurrent.peakCurrentDuration = 1500;
+    highCurrent.continuousCurrentLimit = 10;
+
+    lowCurrent = new TalonSRXConfiguration();
+    lowCurrent.peakCurrentLimit = 5;
+    lowCurrent.peakCurrentDuration = 10;
+    lowCurrent.continuousCurrentLimit = 5;
   }
 
   @Override
@@ -36,7 +51,15 @@ public class DriveTrain extends SubsystemBase {
     Logger.recordOutput("DriveTrain/LeftPower", leftPower);
   }
 
-  public void toggleMode(){
+  public void toggleMode() {
     io.toggleMode();
+  }
+
+  public void setLowCurrentMode() {
+    io.setPowerProfile(lowCurrent);
+  }
+
+  public void setHighCurrentMode() {
+    io.setPowerProfile(highCurrent);
   }
 }
