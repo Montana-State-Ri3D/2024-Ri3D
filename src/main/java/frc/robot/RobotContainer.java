@@ -54,9 +54,12 @@ public class RobotContainer {
   private SequentialCommandGroup hiIntake;
   private SequentialCommandGroup climber;
   private SequentialCommandGroup feederPlace;
-  private SequentialCommandGroup shootRingAuto;
+  private SequentialCommandGroup shootRingAuto1;
+  private SequentialCommandGroup shootRingAuto2;
+  private SequentialCommandGroup shootRingAuto3;
   private SequentialCommandGroup autoShootDrive;
   private SequentialCommandGroup autoAmpBlue;
+  private SequentialCommandGroup autoAmpRed;
   
 
   private RobotIdentity identity;
@@ -76,7 +79,7 @@ public class RobotContainer {
     intakeSubsystem = SubsystemFactory.createIntake(identity);
     shooterSubsystem = SubsystemFactory.createShooter(identity);
     armSubsystem = SubsystemFactory.createArm(identity);
-    camera = SubsystemFactory.createCamera(identity);
+    //camera = SubsystemFactory.createCamera(identity);
   }
 
   private void createCommands() {
@@ -124,27 +127,56 @@ public class RobotContainer {
     climber.addCommands(new InstantCommand(() -> armSubsystem.setPosition("CLIMB")));
     climber.addCommands(new ClimberCommand(climberSubsystem, () -> driveController.getRightY(), armSubsystem,() -> driveController.b().getAsBoolean()));
 
-    shootRingAuto = new SequentialCommandGroup();
+    shootRingAuto1 = new SequentialCommandGroup();
 
-    shootRingAuto.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
-    shootRingAuto.addCommands(new InstantCommand(() -> shooterSubsystem.setPowers(0.9, 0.9)));
-    shootRingAuto.addCommands(new WaitCommand(2));
-    shootRingAuto.addCommands(new UnloadCommand(intakeSubsystem, () -> false));
-    shootRingAuto.addCommands(new StopShooterCommand(shooterSubsystem));
+    shootRingAuto1.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
+    shootRingAuto1.addCommands(new InstantCommand(() -> shooterSubsystem.setPowers(0.9, 0.9)));
+    shootRingAuto1.addCommands(new WaitCommand(2));
+    shootRingAuto1.addCommands(new UnloadCommand(intakeSubsystem, () -> false));
+    shootRingAuto1.addCommands(new StopShooterCommand(shooterSubsystem));
+
+    shootRingAuto2 = new SequentialCommandGroup();
+
+    shootRingAuto2.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
+    shootRingAuto2.addCommands(new InstantCommand(() -> shooterSubsystem.setPowers(0.9, 0.9)));
+    shootRingAuto2.addCommands(new WaitCommand(2));
+    shootRingAuto2.addCommands(new UnloadCommand(intakeSubsystem, () -> false));
+    shootRingAuto2.addCommands(new StopShooterCommand(shooterSubsystem));
+
+    shootRingAuto3 = new SequentialCommandGroup();
+
+    shootRingAuto3.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
+    shootRingAuto3.addCommands(new InstantCommand(() -> shooterSubsystem.setPowers(0.9, 0.9)));
+    shootRingAuto3.addCommands(new WaitCommand(2));
+    shootRingAuto3.addCommands(new UnloadCommand(intakeSubsystem, () -> false));
+    shootRingAuto3.addCommands(new StopShooterCommand(shooterSubsystem));
     
     autoShootDrive = new SequentialCommandGroup();
 
-    autoShootDrive.addCommands(shootRingAuto);
+    autoShootDrive.addCommands(shootRingAuto1);
     autoShootDrive.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.25, 0.25), driveTrainSubsystem));
     autoShootDrive.addCommands(new WaitCommand(2));
     autoShootDrive.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.0, 0.0), driveTrainSubsystem));
 
     autoAmpBlue = new SequentialCommandGroup();
+    autoAmpBlue.addCommands(shootRingAuto2);
     autoAmpBlue.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.4, 0.4), driveTrainSubsystem));
     autoAmpBlue.addCommands(new WaitCommand(0.5));
     autoAmpBlue.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(-0.4, 0.4), driveTrainSubsystem));
     autoAmpBlue.addCommands(new WaitCommand(0.6));
+    autoAmpBlue.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.25, 0.25), driveTrainSubsystem));
+    autoAmpBlue.addCommands(new WaitCommand(2));
     autoAmpBlue.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.0, 0.0), driveTrainSubsystem));
+
+    autoAmpRed = new SequentialCommandGroup();
+    autoAmpRed.addCommands(shootRingAuto3);
+    autoAmpRed.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.4, 0.4), driveTrainSubsystem));
+    autoAmpRed.addCommands(new WaitCommand(0.5));
+    autoAmpRed.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.4, -0.4), driveTrainSubsystem));
+    autoAmpRed.addCommands(new WaitCommand(0.6));
+    autoAmpRed.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.25, 0.25), driveTrainSubsystem));
+    autoAmpRed.addCommands(new WaitCommand(2));
+    autoAmpRed.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.0, 0.0), driveTrainSubsystem));
 
   }
 
@@ -168,11 +200,11 @@ public class RobotContainer {
     autoChooser = new AutoCommandChooser();
 
     // Register all the supported auto commands
-    autoChooser.registerDefaultCreator("Do Nothing", null);
+    autoChooser.registerCreator("Do Nothing", null);
 
     autoChooser.registerCreator("Drive Forward", () -> autoShootDrive);
     autoChooser.registerCreator("Amp Side Left (Blue)", () -> autoAmpBlue);
-    autoChooser.registerCreator("Amp Side Right (Red)", null);
+    autoChooser.registerDefaultCreator("Amp Side Right (Red)", null);
 
     // Setup the chooser in shuffleboard
     autoChooser.setup("Driver", 0, 0, 3, 1);

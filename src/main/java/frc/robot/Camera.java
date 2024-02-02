@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -20,6 +21,7 @@ public class Camera{
     camera = CameraServer.startAutomaticCapture("cameraA", 0);
     cameraName = camera.getName();
     //camera.setPixelFormat(VideoMode.PixelFormat.kGray);
+    //camera.setResolution(0, 0)
 
     server = CameraServer.getServer();
     server.setSource(camera);
