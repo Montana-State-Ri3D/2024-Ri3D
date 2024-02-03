@@ -15,6 +15,8 @@ public class DriveTrain extends SubsystemBase {
   private TalonSRXConfiguration highCurrent;
   private TalonSRXConfiguration lowCurrent;
 
+  private boolean lowCurrentMode = false;
+
   public DriveTrain(DriveTrainIO io) {
     this.io = io;
 
@@ -34,6 +36,7 @@ public class DriveTrain extends SubsystemBase {
     io.updateInputs(inputs);
 
     Logger.processInputs("DriveTrain", inputs);
+    Logger.recordOutput("DriveTrain/LowCurentMode", lowCurrentMode);
 
     if (this.getCurrentCommand() != null) {
 
@@ -56,10 +59,12 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void setLowCurrentMode() {
+    lowCurrentMode = true;
     io.setPowerProfile(lowCurrent);
   }
 
   public void setHighCurrentMode() {
+    lowCurrentMode = false;
     io.setPowerProfile(highCurrent);
   }
 }

@@ -39,6 +39,10 @@ public class Shooter extends SubsystemBase {
     Logger.recordOutput("Shooter/LeftPower", leftPower);
   }
 
+  public void setPID(double speed){
+    io.setRPS(speed, speed);
+  }
+
   public double getLRPS() {
     return inputs.leftVelocity;
   }

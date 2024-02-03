@@ -14,6 +14,7 @@ public interface ShooterIO {
         public double rightPosition;
         public double leftAppliedPower;
         public double rightApppliedPower;
+        public double setPoint;
     }
     default void updateInputs(ShooterIOInputs inputs){}
     default void setPowers(double leftPower, double rightPower) {}

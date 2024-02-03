@@ -49,6 +49,7 @@ public class DriveTrainRealIO implements DriveTrainIO {
         rightMotor_2.follow(rightMotor_1);
 
         isBrake = false;
+        
     }
 
     public void updateInputs(DriveTrainIOInputs inputs){

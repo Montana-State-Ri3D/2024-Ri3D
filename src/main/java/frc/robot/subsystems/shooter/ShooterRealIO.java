@@ -21,9 +21,11 @@ public class ShooterRealIO implements ShooterIO {
     private RelativeEncoder leftMotorEncoder;
     private RelativeEncoder rightMotorEncoder;
 
-    private double p = 0;
-    private double i = 0;
-    private double d = 0;
+    private double p = 0.001;
+    private double i = 0.00001;
+    private double d = 0.0;
+
+    private double setPoint = 0;
 
     public ShooterRealIO(int IDleftMotor, int IDrightMotor) {
         leftMotor = new CANSparkMax(IDleftMotor, MotorType.kBrushless);
@@ -37,6 +39,9 @@ public class ShooterRealIO implements ShooterIO {
 
         leftMotor.setInverted(false);
         rightMotor.setInverted(true);
+
+        leftPIDController.setOutputRange(-1,1);
+        rightPIDController.setOutputRange(-1, 1);
 
         leftMotor.setSmartCurrentLimit(80);
         rightMotor.setSmartCurrentLimit(80);
@@ -70,6 +75,7 @@ public class ShooterRealIO implements ShooterIO {
         inputs.rightPosition = rightMotorEncoder.getPosition();
         inputs.leftAppliedPower = leftMotor.getAppliedOutput();
         inputs.rightApppliedPower = rightMotor.getAppliedOutput();
+        inputs.setPoint = setPoint;
     }
 
     public void setPowers(double leftPower, double rightPower) {
@@ -80,5 +86,7 @@ public class ShooterRealIO implements ShooterIO {
     public void setRPS(double leftRPS, double rightRPS) {
         leftPIDController.setReference(leftRPS, ControlType.kVelocity);
         rightPIDController.setReference(rightRPS, ControlType.kVelocity);
+
+        this.setPoint = leftRPS;
     }
 }

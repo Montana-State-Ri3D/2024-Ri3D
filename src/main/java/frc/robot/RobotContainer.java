@@ -17,6 +17,7 @@ import frc.robot.utility.RobotIdentity;
 import frc.robot.utility.SubsystemFactory;
 import frc.robot.Camera;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -79,7 +80,7 @@ public class RobotContainer {
     intakeSubsystem = SubsystemFactory.createIntake(identity);
     shooterSubsystem = SubsystemFactory.createShooter(identity);
     armSubsystem = SubsystemFactory.createArm(identity);
-    //camera = SubsystemFactory.createCamera(identity);
+    camera = SubsystemFactory.createCamera(identity);
   }
 
   private void createCommands() {
@@ -97,7 +98,7 @@ public class RobotContainer {
     
     shootRing.addCommands(new InstantCommand(() -> driveTrainSubsystem.setLowCurrentMode()));
     shootRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
-    shootRing.addCommands(new InstantCommand(() -> shooterSubsystem.setPowers(0.9, 0.9)));
+    shootRing.addCommands(new InstantCommand(() -> shooterSubsystem.setPID(Units.rotationsPerMinuteToRadiansPerSecond(4500.0))));
     shootRing.addCommands(new WaitCommandWithExit(2, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new InstantCommand(() -> driveTrainSubsystem.setHighCurrentMode()));
@@ -200,14 +201,14 @@ public class RobotContainer {
     autoChooser = new AutoCommandChooser();
 
     // Register all the supported auto commands
-    autoChooser.registerCreator("Do Nothing", null);
+    autoChooser.registerDefaultCreator("Do Nothing", null);
 
     autoChooser.registerCreator("Drive Forward", () -> autoShootDrive);
     autoChooser.registerCreator("Amp Side Left (Blue)", () -> autoAmpBlue);
-    autoChooser.registerDefaultCreator("Amp Side Right (Red)", null);
+    autoChooser.registerCreator("Amp Side Right (Red)",() -> autoAmpRed);
 
     // Setup the chooser in shuffleboard
-    autoChooser.setup("Driver", 0, 0, 3, 1);
+    autoChooser.setup("Auto", 0, 0, 3, 1);
 
   }
 
