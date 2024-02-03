@@ -10,8 +10,11 @@ public class IntakeCommand extends Command {
 
     private final BooleanSupplier cancel;
 
-    public IntakeCommand(Intake intake, BooleanSupplier cancel) {
+    private double speed;
+
+    public IntakeCommand(Intake intake, BooleanSupplier cancel,double speed) {
         this.cancel = cancel;
+        this.speed = speed;
         addRequirements(intake);
 
         this.intake = intake;
@@ -20,7 +23,7 @@ public class IntakeCommand extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        intake.setPower(0.4);
+        intake.setPower(speed);
     }
 
     // Called every time the scheduler runs while the command is scheduled.

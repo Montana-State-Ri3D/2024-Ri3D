@@ -64,6 +64,7 @@ public class RobotContainer {
   private SequentialCommandGroup autoAmpBlue;
   private SequentialCommandGroup autoAmpRed;
   
+  
 
   private RobotIdentity identity;
 
@@ -109,13 +110,13 @@ public class RobotContainer {
     intakeRing = new SequentialCommandGroup();
 
     intakeRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("INTAKE")));
-    intakeRing.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
+    intakeRing.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean(), 0.8));
     intakeRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
 
     hiIntake = new SequentialCommandGroup();
 
     hiIntake.addCommands(new InstantCommand(() -> armSubsystem.setPosition("HI_INTAKE")));
-    hiIntake.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
+    hiIntake.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean(), 0.4));
     hiIntake.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
 
     feederPlace = new SequentialCommandGroup();
@@ -221,6 +222,6 @@ public class RobotContainer {
 
   public void resetSubSystems(){
     shooterSubsystem.setPowers(0, 0);
-    
+
   }
 }
