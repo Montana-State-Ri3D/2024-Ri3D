@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import static frc.robot.Constants.*;
 
+import java.security.PublicKey;
+
 @SuppressWarnings("unused")
 public class RobotContainer {
 
@@ -131,24 +133,24 @@ public class RobotContainer {
     shootRingAuto1 = new SequentialCommandGroup();
 
     shootRingAuto1.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
-    shootRingAuto1.addCommands(new InstantCommand(() -> shooterSubsystem.setPowers(0.9, 0.9)));
-    shootRingAuto1.addCommands(new WaitCommand(2));
+    shootRingAuto1.addCommands(new InstantCommand(() -> shooterSubsystem.setPID(Units.rotationsPerMinuteToRadiansPerSecond(4500.0))));
+    shootRingAuto1.addCommands(new WaitCommand(1.5));
     shootRingAuto1.addCommands(new UnloadCommand(intakeSubsystem, () -> false));
     shootRingAuto1.addCommands(new StopShooterCommand(shooterSubsystem));
 
     shootRingAuto2 = new SequentialCommandGroup();
 
     shootRingAuto2.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
-    shootRingAuto2.addCommands(new InstantCommand(() -> shooterSubsystem.setPowers(0.9, 0.9)));
-    shootRingAuto2.addCommands(new WaitCommand(2));
+    shootRingAuto2.addCommands(new InstantCommand(() -> shooterSubsystem.setPID(Units.rotationsPerMinuteToRadiansPerSecond(4500.0))));
+    shootRingAuto2.addCommands(new WaitCommand(1.5));
     shootRingAuto2.addCommands(new UnloadCommand(intakeSubsystem, () -> false));
     shootRingAuto2.addCommands(new StopShooterCommand(shooterSubsystem));
 
     shootRingAuto3 = new SequentialCommandGroup();
 
     shootRingAuto3.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
-    shootRingAuto3.addCommands(new InstantCommand(() -> shooterSubsystem.setPowers(0.9, 0.9)));
-    shootRingAuto3.addCommands(new WaitCommand(2));
+    shootRingAuto3.addCommands(new InstantCommand(() -> shooterSubsystem.setPID(Units.rotationsPerMinuteToRadiansPerSecond(4500.0))));
+    shootRingAuto3.addCommands(new WaitCommand(1.5));
     shootRingAuto3.addCommands(new UnloadCommand(intakeSubsystem, () -> false));
     shootRingAuto3.addCommands(new StopShooterCommand(shooterSubsystem));
     
@@ -195,6 +197,7 @@ public class RobotContainer {
     driveController.povLeft().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCH")));
     driveController.povUp().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCHSTANDBY")));
     driveController.povDown().onTrue(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
+    driveController.povRight().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCHAPROCH")));
   }
 
   private void createAutoCommand(){
@@ -214,5 +217,10 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return autoAmpBlue;
+  }
+
+  public void resetSubSystems(){
+    shooterSubsystem.setPowers(0, 0);
+    
   }
 }

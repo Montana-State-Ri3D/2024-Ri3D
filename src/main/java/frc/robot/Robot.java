@@ -77,6 +77,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void autonomousInit() {
+    m_robotContainer.resetSubSystems();
     m_robotContainer.driveTrainSubsystem.removeDefaultCommand();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -111,6 +112,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
+    m_robotContainer.resetSubSystems();
     CommandScheduler.getInstance().cancelAll();
   }
 

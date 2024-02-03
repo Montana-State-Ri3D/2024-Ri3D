@@ -62,7 +62,9 @@ public class Arm extends SubsystemBase {
       setArmAngle(Units.degreesToRadians(171));
     } else if (position.equals("LATCH")) {
       setArmAngle(Units.degreesToRadians(217));
-    } else if (position.equals("CLIMB")){
+    } else if (position.equals("LATCHAPROCH")){
+      setArmAngle(Units.degreesToRadians(105));
+    }else if (position.equals("CLIMB")){
       setArmAngle(Units.degreesToRadians(277));
     }else if (position.equals("HI_INTAKE")){
       setArmAngle(Units.degreesToRadians(153));
