@@ -21,7 +21,7 @@ public class ShooterRealIO implements ShooterIO {
     private RelativeEncoder leftMotorEncoder;
     private RelativeEncoder rightMotorEncoder;
 
-    private double p = 0.001;
+    private double p = 0.0009;
     private double i = 0.00001;
     private double d = 0.0;
 
