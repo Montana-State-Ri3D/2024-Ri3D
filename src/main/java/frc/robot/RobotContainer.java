@@ -99,7 +99,7 @@ public class RobotContainer {
     shootRing.addCommands(new InstantCommand(() -> driveTrainSubsystem.setLowCurrentMode()));
     shootRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
     shootRing.addCommands(new InstantCommand(() -> shooterSubsystem.setPID(Units.rotationsPerMinuteToRadiansPerSecond(4500.0))));
-    shootRing.addCommands(new WaitCommandWithExit(2, () -> driveController.b().getAsBoolean()));
+    shootRing.addCommands(new WaitCommandWithExit(1.5, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new InstantCommand(() -> driveTrainSubsystem.setHighCurrentMode()));
     shootRing.addCommands(new StopShooterCommand(shooterSubsystem));
