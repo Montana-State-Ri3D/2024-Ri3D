@@ -63,6 +63,8 @@ public class RobotContainer {
   private SequentialCommandGroup autoShootDrive;
   private SequentialCommandGroup autoAmpBlue;
   private SequentialCommandGroup autoAmpRed;
+  private SequentialCommandGroup feedBack;
+  private SequentialCommandGroup feedForward;
   
   
 
@@ -131,6 +133,18 @@ public class RobotContainer {
     climber.addCommands(new InstantCommand(() -> armSubsystem.setPosition("CLIMB")));
     climber.addCommands(new ClimberCommand(climberSubsystem, () -> driveController.getRightY(), armSubsystem,() -> driveController.b().getAsBoolean()));
 
+    feedBack = new SequentialCommandGroup();
+    feedBack.addCommands(new InstantCommand(() -> intakeSubsystem.setPower(-.2)));
+    feedBack.addCommands(new WaitCommand(0.025
+    ));
+    feedBack.addCommands(new InstantCommand(() -> intakeSubsystem.setPower(0.0)));
+
+    feedForward = new SequentialCommandGroup();
+    feedForward.addCommands(new InstantCommand(() -> intakeSubsystem.setPower(0.2)));
+    feedForward.addCommands(new WaitCommand(0.025
+    ));
+    feedForward.addCommands(new InstantCommand(() -> intakeSubsystem.setPower(0.0)));
+
     shootRingAuto1 = new SequentialCommandGroup();
 
     shootRingAuto1.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
@@ -166,34 +180,37 @@ public class RobotContainer {
     autoAmpBlue.addCommands(shootRingAuto2);
     autoAmpBlue.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.4, 0.4), driveTrainSubsystem));
     autoAmpBlue.addCommands(new WaitCommand(0.5));
-    autoAmpBlue.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(-0.4, 0.4), driveTrainSubsystem));
-    autoAmpBlue.addCommands(new WaitCommand(0.6));
-    autoAmpBlue.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.25, 0.25), driveTrainSubsystem));
-    autoAmpBlue.addCommands(new WaitCommand(2));
+    autoAmpBlue.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(-0.65, 0.65), driveTrainSubsystem));
+    autoAmpBlue.addCommands(new WaitCommand(0.7));
+    autoAmpBlue.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.3, 0.3), driveTrainSubsystem));
+    autoAmpBlue.addCommands(new WaitCommand(2.5));
     autoAmpBlue.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.0, 0.0), driveTrainSubsystem));
 
     autoAmpRed = new SequentialCommandGroup();
     autoAmpRed.addCommands(shootRingAuto3);
     autoAmpRed.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.4, 0.4), driveTrainSubsystem));
     autoAmpRed.addCommands(new WaitCommand(0.5));
-    autoAmpRed.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.4, -0.4), driveTrainSubsystem));
-    autoAmpRed.addCommands(new WaitCommand(0.6));
-    autoAmpRed.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.25, 0.25), driveTrainSubsystem));
-    autoAmpRed.addCommands(new WaitCommand(2));
+    autoAmpRed.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.65, -0.65), driveTrainSubsystem));
+    autoAmpRed.addCommands(new WaitCommand(.9));
+    autoAmpRed.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.3, 0.3), driveTrainSubsystem));
+    autoAmpRed.addCommands(new WaitCommand(2.5));
     autoAmpRed.addCommands(new InstantCommand(() -> driveTrainSubsystem.drive(0.0, 0.0), driveTrainSubsystem));
 
   }
 
   private void configureButtonBindings() {
 
-    driveController.rightBumper().onTrue(shootRing);
+    driveController.leftBumper().onTrue(shootRing);
     driveController.a().onTrue(intakeRing);
 
     operatorController.leftBumper().onTrue(climber);
     driveController.y().onTrue(feederPlace);
     driveController.x().onTrue(hiIntake);
 
-    driveController.leftBumper().whileTrue(turboDriveCommand);
+    operatorController.povDown().onTrue(feedBack);
+    operatorController.povUp().onTrue(feedForward);
+
+    driveController.rightBumper().whileTrue(turboDriveCommand);
 
     driveController.povLeft().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCH")));
     driveController.povUp().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCHSTANDBY")));
@@ -217,7 +234,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return autoAmpBlue;
+    return autoChooser.getAutonomousCommand();
   }
 
   public void resetSubSystems(){
