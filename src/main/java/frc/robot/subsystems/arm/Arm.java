@@ -15,7 +15,7 @@ public class Arm extends SubsystemBase {
 
   private ArmIO io;
 
-  private double ARM_MAX_ANGLE = Units.degreesToRadians(277)  ;
+  private double ARM_MAX_ANGLE = Units.degreesToRadians(283)  ;
   private double ARM_MIN_ANGLE = Units.degreesToRadians(35);
 
   public Arm(ArmIO io) {
@@ -53,11 +53,11 @@ public class Arm extends SubsystemBase {
     Logger.recordOutput("Arm/Position", position);
 
     if (position.equals("INTAKE")) {
-      setArmAngle(Units.degreesToRadians(36));
+      setArmAngle(Units.degreesToRadians(38));
     } else if (position.equals("AMP")) {
       setArmAngle(Units.degreesToRadians(171));
     } else if (position.equals("SHOOT")) {
-      setArmAngle(Units.degreesToRadians(274));
+      setArmAngle(Units.degreesToRadians(282));
     } else if (position.equals("LATCHSTANDBY")) {
       setArmAngle(Units.degreesToRadians(171));
     } else if (position.equals("LATCH")) {
@@ -67,7 +67,7 @@ public class Arm extends SubsystemBase {
     }else if (position.equals("CLIMB")){
       setArmAngle(Units.degreesToRadians(277));
     }else if (position.equals("HI_INTAKE")){
-      setArmAngle(Units.degreesToRadians(153));
+      setArmAngle(Units.degreesToRadians(151));
     }
   }
 
