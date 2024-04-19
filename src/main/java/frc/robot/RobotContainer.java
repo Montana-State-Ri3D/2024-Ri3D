@@ -85,7 +85,7 @@ public class RobotContainer {
     intakeSubsystem = SubsystemFactory.createIntake(identity);
     shooterSubsystem = SubsystemFactory.createShooter(identity);
     armSubsystem = SubsystemFactory.createArm(identity);
-    camera = SubsystemFactory.createCamera(identity);
+    //camera = SubsystemFactory.createCamera(identity);
   }
 
   private void createCommands() {
@@ -103,7 +103,8 @@ public class RobotContainer {
     
     shootRing.addCommands(new InstantCommand(() -> driveTrainSubsystem.setLowCurrentMode()));
     shootRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
-    shootRing.addCommands(new InstantCommand(() -> shooterSubsystem.setPID(Units.rotationsPerMinuteToRadiansPerSecond(4500.0))));
+    //shootRing.addCommands(new InstantCommand(() -> shooterSubsystem.setPID(Units.rotationsPerMinuteToRadiansPerSecond(2500.0))));
+    shootRing.addCommands(new InstantCommand(() -> shooterSubsystem.setPowers(0.6, 0.6)));
     shootRing.addCommands(new WaitCommandWithExit(1.5, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new InstantCommand(() -> driveTrainSubsystem.setHighCurrentMode()));
@@ -112,7 +113,7 @@ public class RobotContainer {
     intakeRing = new SequentialCommandGroup();
 
     intakeRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("INTAKE")));
-    intakeRing.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean(), 0.8));
+    intakeRing.addCommands(new IntakeCommand(intakeSubsystem, () -> driveController.b().getAsBoolean(), 0.6));
     intakeRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
 
     hiIntake = new SequentialCommandGroup();
@@ -203,19 +204,16 @@ public class RobotContainer {
     driveController.leftBumper().onTrue(shootRing);
     driveController.a().onTrue(intakeRing);
 
-    operatorController.leftBumper().onTrue(climber);
+    //operatorController.leftBumper().onTrue(climber);
     driveController.y().onTrue(feederPlace);
     driveController.x().onTrue(hiIntake);
 
-    operatorController.povDown().onTrue(feedBack);
-    operatorController.povUp().onTrue(feedForward);
+    driveController.povDown().onTrue(feedBack);
+    driveController.povUp().onTrue(feedForward);
 
     driveController.rightBumper().whileTrue(turboDriveCommand);
 
-    driveController.povLeft().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCH")));
-    driveController.povUp().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCHSTANDBY")));
-    driveController.povDown().onTrue(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
-    driveController.povRight().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCHAPROCH")));
+    driveController.povRight().onTrue(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
   }
 
   private void createAutoCommand(){

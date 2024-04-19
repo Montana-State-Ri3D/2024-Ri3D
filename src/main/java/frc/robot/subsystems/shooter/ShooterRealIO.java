@@ -21,9 +21,9 @@ public class ShooterRealIO implements ShooterIO {
     private RelativeEncoder leftMotorEncoder;
     private RelativeEncoder rightMotorEncoder;
 
-    private double p = 0.0009;
-    private double i = 0.00001;
-    private double d = 0.0;
+    private double p = 0.05;
+    private double i = 0.0;
+    private double d = 0.001;
 
     private double setPoint = 0;
 
@@ -37,7 +37,7 @@ public class ShooterRealIO implements ShooterIO {
         leftMotorEncoder = leftMotor.getEncoder();
         rightMotorEncoder = rightMotor.getEncoder();
 
-        leftMotor.setInverted(false);
+        leftMotor.setInverted(true);
         rightMotor.setInverted(true);
 
         leftPIDController.setOutputRange(-1,1);
