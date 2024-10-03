@@ -33,8 +33,8 @@ public class RobotContainer {
   // Creating Controlers
   @SuppressWarnings({ "unused" })
   private final CommandXboxController driveController = new CommandXboxController(DRIVE_CONTROLLER_PORT);
-  @SuppressWarnings({ "unused" })
-  private final CommandXboxController operatorController = new CommandXboxController(OPERATOR_CONTROLLER_PORT);
+  //@SuppressWarnings({ "unused" })
+  //private final CommandXboxController operatorController = new CommandXboxController(OPERATOR_CONTROLLER_PORT);
   @SuppressWarnings({ "unused" })
   private final CommandXboxController testController = new CommandXboxController(TEST_CONTROLLER_PORT);
 
@@ -85,7 +85,7 @@ public class RobotContainer {
     intakeSubsystem = SubsystemFactory.createIntake(identity);
     shooterSubsystem = SubsystemFactory.createShooter(identity);
     armSubsystem = SubsystemFactory.createArm(identity);
-    camera = SubsystemFactory.createCamera(identity);
+    //camera = SubsystemFactory.createCamera(identity);
   }
 
   private void createCommands() {
@@ -103,7 +103,7 @@ public class RobotContainer {
     
     shootRing.addCommands(new InstantCommand(() -> driveTrainSubsystem.setLowCurrentMode()));
     shootRing.addCommands(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
-    shootRing.addCommands(new InstantCommand(() -> shooterSubsystem.setPID(Units.rotationsPerMinuteToRadiansPerSecond(4500.0))));
+    shootRing.addCommands(new InstantCommand(() -> shooterSubsystem.setPID(Units.rotationsPerMinuteToRadiansPerSecond(3000.0))));
     shootRing.addCommands(new WaitCommandWithExit(1.5, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new UnloadCommand(intakeSubsystem, () -> driveController.b().getAsBoolean()));
     shootRing.addCommands(new InstantCommand(() -> driveTrainSubsystem.setHighCurrentMode()));
@@ -203,19 +203,19 @@ public class RobotContainer {
     driveController.leftBumper().onTrue(shootRing);
     driveController.a().onTrue(intakeRing);
 
-    operatorController.leftBumper().onTrue(climber);
+    //operatorController.leftBumper().onTrue(climber);
     driveController.y().onTrue(feederPlace);
     driveController.x().onTrue(hiIntake);
 
-    operatorController.povDown().onTrue(feedBack);
-    operatorController.povUp().onTrue(feedForward);
+    driveController.povDown().onTrue(feedBack);
+    driveController.povUp().onTrue(feedForward);
 
     driveController.rightBumper().whileTrue(turboDriveCommand);
 
-    driveController.povLeft().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCH")));
-    driveController.povUp().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCHSTANDBY")));
-    driveController.povDown().onTrue(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
-    driveController.povRight().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCHAPROCH")));
+    //driveController.povLeft().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCH")));
+    //driveController.povUp().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCHSTANDBY")));
+    //driveController.povDown().onTrue(new InstantCommand(() -> armSubsystem.setPosition("SHOOT")));
+    //driveController.povRight().onTrue(new InstantCommand(() -> armSubsystem.setPosition("LATCHAPROCH")));
   }
 
   private void createAutoCommand(){
